@@ -3,12 +3,11 @@ Tiny Reactive UI
 
 Trui is a tiny reactive UI library for JavaScript.
 
-As of March 27th, 2024 it was actually smaller that VanJS, the library that claims to be the smallest reactive UI
-library in the world.
+The closest comparable library is VanJS.
 
 ## Comparing trui and VanJS
 
-- trui is 1,560 bytes minified and gzipped, while VanJS is 1,704 bytes minified and gzipped.
+- trui is 1,560 bytes minified and gzipped, while VanJS official number is 1,055
 - trui has a slightly smaller API surface than VanJS, it does not support `add`
 - trui uses the function 'observe' instead of 'derive'
 - trui uses `peek` instead of `rawValue` and `value` instead of `val`
@@ -177,10 +176,17 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.2a 2024-04-27
+
+- removed some un-needed tracking of elements that do not reference state
+
 v0.0.1a 2024-04-27 Initial release
 
 - I do not expect trui will get any larger, and if it does it will only be by a few bytes
 - The architecture for adding functionality without increasing core size more than a few bytes is in place, see the use of `load` in the examples
+
+
+
 
 ```
 

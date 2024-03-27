@@ -15,8 +15,10 @@ const dMap = new Map(),
         let _v_ = object.valueOf();
         const R = Reflect,
             updt = (t) => {
-                for(let d of [...dMap.get(t)||[]]) {
+                const set = dMap.get(t);
+                for(let d of [...set||[]]) {
                     if(typeof d === "function") d();
+                    else if(!d.isConnected) set.delete(d);
                     else if(d.isConnected && d!==this) rMap.get(d)?.call(d);
                 }
             },
