@@ -101,7 +101,7 @@ const dMap = new Map(),
                         else if (a === 'dataset') Object.assign(e.dataset, value);
                         else if(a === 'value') e.value = value;
                         else e.setAttribute(a, value && type==="object" ? JSON.stringify(value) : value);
-                        if(a==="href" && xsui.load) dp(e, 'load', {configurable:true,value: xsui.load});
+                        if(a==="href" && trui.load) dp(e, 'load', {configurable:true,value: trui.load});
                     }
                     for (let c of children) {
                         if (typeof c === 'function') c = c();
@@ -119,10 +119,10 @@ const dMap = new Map(),
             };
         }
     });
-const xsui = ({load}={}) => {
-    if(load) xsui.load = load;
-    return xsui;
+const trui = ({load}={}) => {
+    if(load) trui.load = load;
+    return trui;
 }
-Object.assign(xsui, {tags, state, observe});
+Object.assign(trui, {tags, state, observe});
 
-export {xsui, xsui as default}
+export {trui, trui as default}

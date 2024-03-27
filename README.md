@@ -176,6 +176,10 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.3a 2024-04-27
+
+- version source sync with NPM
+
 v0.0.2a 2024-04-27
 
 - removed some un-needed tracking of elements that do not reference state
@@ -185,9 +189,5 @@ v0.0.1a 2024-04-27 Initial release
 - I do not expect trui will get any larger, and if it does it will only be by a few bytes
 - The architecture for adding functionality without increasing core size more than a few bytes is in place, see the use of `load` in the examples
 
-
-
-
-```
 
 
