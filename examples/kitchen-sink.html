@@ -6,9 +6,11 @@
 </head>
 <body>
 <script type="module">
-    import {trui} from '../trui.min.js';
+    import {trui} from '../src/trui.js';
     import {load} from '../src/load.js';
-    trui({load});
+    import {add} from '../src/add.js';
+    import {xon} from '../src/xon.js';
+    trui({load,add,xon});
 
     const {button,input,div, sup} = trui.tags;
 
@@ -127,11 +129,18 @@
 
 </script>
 
-<p href="/examples/header.html" target=">" onclick="this.load()">Header Placeholder (Click Me)</p>
+<p x-href="/examples/header.html" target=">" onclick="this.load()">Header Placeholder (Click Me)</p>
+
+<p x-href="/examples/messages.html#peekaboo" target=">" x-on='mouseover ephemeral:1000 throttle:2000 load:{"options":{"method":"GET"}}'>Message (Mouseover Me)</p>
+
+<p target=">" x-on='every:2000 html:Date.now'>Timer</p>
 
 <script type="module">
+    import {trui} from '../src/trui.js';
     import {load} from '../src/load.js';
-    load.patchDOM()
+    import {xon} from '../src/xon.js';
+    load.patchDOM();
+    xon.patchDOM(document.body,trui.ctx);
 </script>
 </body>
 </body>
