@@ -74,7 +74,7 @@ const rhtmlCounter = () => {
         return state.count||=0
     });
 }
-currentScript.insertAdjacentElement("afterend", rhtmlCounter());
+document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 </script>
 ```
 
@@ -96,7 +96,7 @@ const rjsCounter = () => {
             return state.value
         });
     }
-currentScript.insertAdjacentElement("afterend", rjsCounter());
+document.currentScript.insertAdjacentElement("afterend", rjsCounter());
 </script>
 ```
 
@@ -120,7 +120,7 @@ const rjsForm = () => {
         });
     });
 }
-currentScript.insertAdjacentElement("afterend", rjsForm());
+document.currentScript.insertAdjacentElement("afterend", rjsForm());
 ```
 
 ### Element Fetch (element-fetch.js) - similar to htmx load
