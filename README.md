@@ -79,7 +79,7 @@ document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
 
 <script src="./src/rjs.js"></script>
-<script>var {button,div,p} = rjs.tags;</script>
+<script>var {button,div,input,p} = rjs.tags;</script>
 ```!javascript
 var rjsCounter = () => {
         const state = rjs.state(0);
