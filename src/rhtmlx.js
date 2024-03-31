@@ -34,21 +34,21 @@
         }
         return selector===true ? scope : scope.closest(selector)
     }
-    window.$state = (object,selector=true,{property=object.target?.name,stop=true}={}) => {
+    window.$state = (object,selector=true,{property=object.target?.name,value=object.target?.value,stop=true}={}) => {
         const target = object instanceof Event ? object.currentTarget : object,
             state = $closest(target,selector).state;
         if(object instanceof Event && property) {
             if(stop) object.stopImmediatePropagation();
-            state[property] = object.target.value;
+            state[property] = parse(value);
         }
         return state;
     }
-    window.$data = (object,selector=true,{property=object.target?.name,stop=true}={}) => {
+    window.$data = (object,selector=true,{property=object.target?.name,value=object.target?.value,stop=true}={}) => {
         const target = object instanceof Event ? object.currentTarget : object,
             dataset = $closest(target,selector).dataset;
         if(object instanceof Event && property) {
             if(stop) object.stopImmediatePropagation();
-            dataset[property] = object.target.value;
+            dataset[property] = value;
         }
         return dataset;
     }

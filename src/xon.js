@@ -123,7 +123,7 @@
     }
     HTMLElement.prototype.xon = xon;
 
-    const onload = () => setInterval(() => {
+    /*const onload = () => setInterval(() => {
         if (document.readyState === "complete") {
             clearInterval(interval);
             [...document.querySelectorAll('[xon]'),...document.querySelectorAll('[x-on]')].forEach(el => {
@@ -131,5 +131,10 @@
             });
         }
     });
-    const interval = onload();
+    const interval = onload();*/
+    document.addEventListener('DOMContentLoaded', () => {
+        [...document.querySelectorAll('[xon]'), ...document.querySelectorAll('[x-on]')].forEach(el => {
+            xon(el, el.getAttribute('xon') || el.getAttribute('x-on'), typeof rjs === "function" ? rjs.ctx : {})
+        });
+    });
 })();

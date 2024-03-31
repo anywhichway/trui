@@ -35,6 +35,8 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 </p>
 ```
 
+Change the age to greater than or equal 21 to see the message the content change.
+
 ```!html
 <p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
@@ -105,7 +107,7 @@ var rjsForm = () => {
         },
         style: "border:1px solid black; padding:5px"
     }, () => {
-        return `Name: ${state.value.name} Age: ${state.value.age}`;
+        return `Name: ${state.name} Age: ${state.age} `;
     },() => { 
         return input({
             name: "age",
@@ -114,7 +116,7 @@ var rjsForm = () => {
         });
     }, () => {
         return span({
-            style: `display:${state.value.age >=21 ? 'block' : 'none'}`
+            style: `display:${state.age >=21 ? 'block' : 'none'}`
         },() => {
             return "Access is granted";
         });
@@ -146,7 +148,7 @@ The `target` attribute is used to specify the target of the `xon` operation. The
 
 ## Reactive HTML Templating
 
-### $attribute
+### $attribute (requires loading `rhtmlx.js`)
 
 `$attribute` is a utility function that can be used to update the attributes of an element. It is capable of accomplishing 3 things:
 1. Binding to the element for which the attribute needs to be updated
@@ -173,10 +175,14 @@ and `value` must be provided.
 - If it is a string, it is a CSS selector that is used to select the closest matching parent
 
 
-
-### $data
+### $data (requires loading `rhtmlx.js`)
 
 `$data` accomplishes the same three things as `$attribute` but for the `dataset`.
+
+
+### $state (requires loading `rhtmlx.js`)
+
+`$state` accomplishes the same three things as `$attribute` but for the `state`.
 
 Like 
 
