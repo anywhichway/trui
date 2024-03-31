@@ -3,6 +3,8 @@ Tiny Reactive UI
 
 Trui is a Tiny Reactive UI library for JavaScript.
 
+If you are viewing this as a README.md, visit https://anywhichway.github.io/trui/ for a more interactive experience.
+
 The closest comparable libraries are [VanJS](https://vanjs.org/) and [htmx](https://htmx.org/).
 
 You can think of `trui` as what might happen if VanJS and htmx had a baby:
