@@ -62,7 +62,7 @@ Alternatively, you could handle the event at the top level:
 
 ```!html
 <script>
-const rhtmlCounter = () => {
+var rhtmlCounter = () => {
     return button({
         onclick(event) {
             this.state.count ||= 0;
@@ -84,7 +84,7 @@ Whereas states cannot be private with `rhtml,js`, they are a property of each el
 <script src="./src/rjs.js"></script>
 const {button,div,p} = rjs.tags;
 ```!javascript
-const rjsCounter = () => {
+var rjsCounter = () => {
         const state = rjs.state(0);
         return button({
             onclick() {
@@ -100,7 +100,7 @@ document.currentScript.insertAdjacentElement("afterend", rjsCounter());
 Below we return to the eligibility example using private state instead of data attributes:
 
 ```!javascript
-const rjsForm = () => {
+var rjsForm = () => {
     const state = rjs.state({name:"Joe",age:21});
     return p({
         oninput(event) {
