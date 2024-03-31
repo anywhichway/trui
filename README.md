@@ -41,8 +41,8 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 <script src="./src/rhtmlx.js"></script>
 ```!html
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible">
-    Name: ${name} Age: ${age} Profile: ${href}
-    Age: <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
+    Name: ${name} Age: ${age}
+    <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
 </p>
 ```
@@ -51,8 +51,8 @@ Alternatively, you could handle the event at the top level:
 
 ```!html
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
-    Name: ${name} Age: ${age} Profile: ${href}
-    Age: <input name="age" type="number" value="${age}">
+    Name: ${name} Age: ${age}
+    <input name="age" type="number" value="${age}">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
 </p>
 ```
