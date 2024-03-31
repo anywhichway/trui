@@ -108,22 +108,22 @@ var rjsForm = () => {
     const state = rjs.state({name:"Joe",age:21});
     return p({
         oninput(event) {
-            state.value[event.target.name] = event.target.value;
+            state[event.target.name] = event.target.value;
         },
         style: "border:1px solid black; padding:5px"
     }, () => {
-        return `Name: ${state.name} Age: ${state.age} `;
+        return `Name: ${state.name} Age: ${state.age}`;
     },() => { 
         return input({
             name: "age",
             type: "number",
-            value: state.value.age
+            value: state.age
         });
     }, () => {
         return span({
             style: `display:${state.age >=21 ? '' : 'none'}`
         },() => {
-            return "Access is granted";
+            return " Access is granted";
         });
     });
 }
