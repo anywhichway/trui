@@ -43,7 +43,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
-    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
 </p>
 ```
 
@@ -53,7 +53,7 @@ Alternatively, you could handle the event at the top level:
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value="${age}">
-    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
 </p>
 ```
 
@@ -79,7 +79,7 @@ document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
 
 <script src="./src/rjs.js"></script>
-<script>var {button,div,input,p} = rjs.tags;</script>
+<script>var {button,input,span,p} = rjs.tags;</script>
 ```!javascript
 var rjsCounter = () => {
         const state = rjs.state(0);
@@ -112,7 +112,7 @@ var rjsForm = () => {
             value: state.value.age
         });
     }, () => {
-        return div({
+        return span({
             style: `display:${state.value.age >=21 ? 'block' : 'none'}`
         },() => {
             return "Access is granted";
