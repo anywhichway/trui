@@ -1,7 +1,6 @@
 (() => {
     let _d_;
-    const dM = new Map(), // maps elements or observer functions to their dependencies
-        rM = new WeakMap(), // maps elements to their render functions
+    const dM = new WeakMap(), // maps elements or observer functions to their dependencies
         dp = Object.defineProperty,
         ctx = dp({}, '_d_', {get: () => _d_, set: v => _d_ = v}),
         doc = document,
@@ -12,6 +11,14 @@
             _d_ = prev;
             return v;
         }),
+        parse = (value) => {
+            if(typeof value!== "string") return value;
+            try {
+                return JSON.parse(value);
+            } catch {
+                return value;
+            }
+        },
         rctr = o => {
             let _v_ = o.valueOf();
             const R = Reflect,
@@ -21,7 +28,7 @@
                     for (let d of [...set]) {
                         if (typeof d === "function") d();
                         else if (!d.isConnected) set.delete(d); // gc
-                        else if (d !== this) rM.get(d)?.call(d);
+                        else if (d !== this) d.render();
                     }
                     set.size !== 0 || dM.delete(t);
                 },
@@ -38,6 +45,7 @@
                         return (v && typeof value === "object") ? t[p] = rctr(v) : v;
                     },
                     set(t, p, v) {
+                        v = parse(v);
                         if (_v_ !== v) {
                             p === "value" ? _v_ = v : R.set(t, p, v);
                             updt(t);
@@ -85,19 +93,19 @@
                             attrs = {};
                         }
                         children = children.flat();
-                        rM.set(e, r);
+                        e.render = r;
+                        if(this instanceof HTMLElement) {
+                            e.state.assign(this.state);
+                            e.dataset.assign(this.dataset);
+                        }
                         _d_ = e;
-                        !attrs.oncreate || attrs.oncreate(dp(new Event('create', {
-                            bubbles: true,
-                            cancelable: false
-                        }), 'target', {value: e}));
                         for (let a in attrs) {
                             if (!isNaN(parseInt(a))) continue;
                             if (a.startsWith('on')) {
-                                e.addEventListener(a.slice(2), async e => {
+                                e.addEventListener(a.slice(2), async ev => {
                                     const prv = _d_;
-                                    _d_ = e;
-                                    await attrs[a](e);
+                                    _d_ = ev;
+                                    await attrs[a].call(e,ev);
                                     _d_ = prv;
                                 });
                                 continue;
@@ -113,41 +121,31 @@
                             else e.setAttribute(a, v && t === "object" ? JSON.stringify(v) : v);
                         }
                         for (let c of children) {
-                            if (typeof c === 'function') c = c();
+                            if (typeof c === 'function') c = c(e.state);
                             if (c.nodeType === Node.TEXT_NODE) e.appendChild(c)
                             else if (c && typeof c === "object" && c instanceof Node) e.appendChild(c)
                             else e.appendChild(doc.createTextNode(c + ""));
                         }
                         _d_ = prv;
                         if (this instanceof Node) {
-                            rM.delete(this);
                             // gc
-                            dM.forEach((set, key, map) => {
-                                set.delete(this);
-                                set.size !== 0 || map.delete(key);
-                            });
+                            //dM.forEach((set, key, map) => {
+                             //   set.delete(this);
+                             //   set.size !== 0 || map.delete(key);
+                            //});
                             this.replaceWith(e);
                         }
                         if (e.interpolate) e.interpolate();
+                        !attrs.oncreate || attrs.oncreate(dp(new Event('create', {
+                            bubbles: true,
+                            cancelable: false
+                        }), 'target', {value: e}));
                         return e;
                     })();
                 };
             }
         });
-    const add = (t, ...els) => {
-        let w = "beforeend";
-        if (t.constructor.name === "Object") {
-            w = t.where || "beforeend";
-            t = t.target;
-        }
-        let n = t
-        for (let e of els.flatMap()) {
-            n.insertAdjacentElement(w, e);
-            if (w !== "afterend") w = "afterend";
-            n = e;
-        }
-    };
-    const trui = (options = {}) => Object.assign(trui, options),
+    const rjs = (options = {}) => Object.assign(trui, options),
         derive = observe;
-    window.trui = Object.assign(trui, {tags, state, observe, derive, add, ctx});
+    window.rjs = Object.assign(rjs, {tags, state, observe, derive, ctx});
 })();

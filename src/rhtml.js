@@ -1,5 +1,6 @@
 (() => {
-    const parse = (value) => {
+    const parse = window.parse = (value) => {
+            if(typeof value!== "string") return value;
             try {
                 return JSON.parse(value);
             } catch {
@@ -12,6 +13,7 @@
             return new Proxy(el, {
                 get: (target, prop) => {
                     if(typeof prop === "symbol") return Reflect.get(el, prop);
+                    if(target.state[prop]!==undefined) return target.state[prop];
                     if(target.dataset && target.dataset[prop]!==undefined) return parse(target.dataset[prop]);
                     if(target.hasAttribute && target.hasAttribute(prop)) {
                         const value = target.getAttribute(prop);
@@ -24,7 +26,7 @@
         },
         resolve = (str, node) => {
             try {
-                return str.includes("${") ? new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node)) : str
+                return new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node))
             } catch {
                 return str;
             }
@@ -37,65 +39,73 @@
         const t = this,
             oldValue = t.getAttribute(name);
         sa.call(t,name,value);
-        oldValue===value || t.resolve(true);
+        oldValue===value || t.resolve(true,{prop:name});
     }
+    Object.defineProperty(Hp,"state", {
+        configurable:true,
+        get() {
+            Object.defineProperty(this,"state",{value:new Proxy({}, {
+                get(target, prop) {
+                    if(prop==="assign") return (object) => Object.assign(target,object);
+                    return target[prop];
+                },
+                set: (target, prop, value) => {
+                    if(target[prop]===value) return true;
+                    target[prop] = value;
+                    !this.render || this.render();
+                    this.resolve(true,{prop});
+                    return true;
+                }
+            })});
+            return this.state;
+        }
+    });
     Object.defineProperty(Hp,"dataset", {
         get() {
             return new Proxy(dataset.get.call(this), {
+                get: (target, prop) => {
+                    if(prop==="assign") return (object) => Object.assign(target,{...object});
+                    return target[prop]
+                },
                 set: (target, prop, value) => {
                     const oldValue = target[prop];
                     target[prop] = value;
-                    oldValue===target[prop] || this.resolve(true);
+                    if(oldValue!==target[prop]) {
+                        !this.render || this.render();
+                        this.resolve(true,{prop})
+                    }
                     return true;
                 }
             });
         }
     });
-    Hp.resolve = function(run,root) {
+    Hp.resolve = function(run,{prop,root}={}) {
         const t = this;
         if(t.tagName==="SCRIPT") {
             if(run) {
                 const s = document.createElement("script");
                 s.textContent = t.textContent;
-                s.type = s._type || s.type;
+                s.type = t.type;
                 window.currentElement = s;
                 t.replaceWith(s);
                 window.currentElement = null;
             }
         } else if(t.tagName!=="CODE") {
             t.normalize();
-            for (const attr of t.attributes) if ((attr._$ ||= attr.value).includes("${")) t.setAttribute(attr.name, resolve(attr._$, root||t));
+            for (const attr of t.attributes) {
+                attr._$ ||= attr.value;
+                if (["$",prop].every(s => !s || attr._$.includes(s))) t.setAttribute(attr.name, resolve(attr._$, root||t));
+            }
             const childNodes = t.shadowRoot ? t.shadowRoot.childNodes : t.childNodes;
-            for (const child of childNodes) if (child.resolve) child.resolve(run,t.shadowRoot ? t : null);
+            for (const child of childNodes) if (child.resolve) child.resolve(run,{prop,root:t.shadowRoot ? t : null});
         }
     }
-    Text.prototype.resolve = function() {
+    Text.prototype.resolve = function(_,{prop}) {
         const t = this;
-        if((t._$ ||= t.textContent).includes("${")) t.textContent = resolve(t._$, t);
+        t._$ ||= t.textContent;
+        if(["$",prop].every(s => !s || t._$.includes(s))) t.textContent = resolve(t._$, t);
     }
     let _currentElement;
     Object.defineProperty(window,"currentElement",{get: () => document.currentScript||_currentElement,set: (value) => _currentElement = value});
-    window.$closest = (scope,selector) => {
-        if(scope) {
-            if(typeof scope==="object") {
-                window.currentElement = scope;
-                scope = null;
-            } else {
-                selector = scope;
-                scope = null;
-            }
-        }
-        if(!selector) { // get root element if no selector
-            let node = window.currentElement;
-            while(node && node.parentElement) node = node.parentElement;
-            return node;
-        }
-        return (scope||window.currentElement).closest(selector)
-    }
-    window.$update = (event,selector,property=event.target.getAttribute("name")) => {
-        const dataset = $closest(event.target,selector).dataset,
-            input = event.target;
-        dataset[property] = input.hasAttribute("multiple") ? JSON.stringify([...input.selectedOptions].map(option => parse(option.value))) : input.value;
-    }
     document.addEventListener("DOMContentLoaded", () => document.body.resolve());
 })()

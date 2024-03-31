@@ -2,38 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>trui:Kitchen Sink Example</title>
+    <title>rjs:Kitchen Sink Example</title>
 </head>
 <body>
 <script src="../src/element-fetch.js"></script>
 <script src="../src/rhtml.js"></script>
+<script src="../src/rhtmlx.js"></script>
 <script src="../src/xon.js"></script>
-<script src="../src/trui.js"></script>
-<script src="../src/component.js"></script>
+<script src="../src/rjs.js"></script>
 <script type="module">
-    const {button,input,div, sup} = trui.tags;
+    const {button,input,div, sup} = rjs.tags;
 
     const myButton = () => {
-        const state = trui.state(false);
         return button(() => {
             return {
                 onclick() {
-                    state.value = !state.value
+                    this.state.on = !this.state.on
                 },
                 style() {
                     return {
-                        background: state.value ? 'red' : 'blue'
+                        background: this.state.on ? 'red' : 'blue'
                     }
                 }
             }
-        }, () => {
-            return state.value ? 'ON' : 'OFF'
+        }, (state) => {
+            return state.on ? 'ON' : 'OFF'
         });
     }
     document.body.appendChild(myButton());
 
+    const rhtmlCounter = () => {
+        return button({
+            onclick(event) {
+                this.state.count ||= 0;
+                this.state.count++;
+                // state would also be available as event.target.state
+            }
+        }, (state) => {
+            return state.count||=0
+        });
+    }
+    document.body.appendChild(rhtmlCounter());
+
     const myCounter = () => {
-        const state = trui.state(0);
+        const state = rjs.state(0);
         return button({
             onclick() {
                 state.value++;
@@ -45,7 +57,7 @@
     document.body.appendChild(myCounter());
 
     const myInput = () => {
-        const state = trui.state(0);
+        const state = rjs.state(0);
         return input({
             onclick() {
                 state.value++;
@@ -55,7 +67,7 @@
     }
     document.body.appendChild(myInput());
 
-    const {table, tbody, thead, td, th, tr} = trui.tags
+    const {table, tbody, thead, td, th, tr} = rjs.tags
 
     const Table = ({head, data}) => table(
         head ? thead(tr(head.map(h => th(h)))) : [],
@@ -73,20 +85,20 @@
         ],
     }))
 
-    const ctr = trui.state(0),
-        observed = trui.observe(() => {
+    const ctr = rjs.state(0),
+        observed = rjs.observe(() => {
             console.log("Counter is now", ctr.valueOf());
         });
     ctr.value++;
 
     // Create a new state object with init value 1
-    const counter = trui.state(1)
+    const counter = rjs.state(1)
 
     // Log whenever the value of the state is updated
-    trui.observe(() => console.log(`Counter: ${counter}`))
+    rjs.observe(() => console.log(`Counter: ${counter}`))
 
     // Derived state
-    const counterSquared = trui.observe(() => counter.value * counter.value)
+    const counterSquared = rjs.observe(() => counter.value * counter.value)
 
     // Used as a child node
     const dom1 = div(counter)
@@ -106,10 +118,10 @@
 
     document.body.append(incrementBtn, resetBtn, dom1, dom2, dom3, dom4)
 
-    const {option, select, span} = trui.tags
+    const {option, select, span} = rjs.tags
 
     const FontPreview = () => {
-        const size = trui.state(16), color = trui.state("black")
+        const size = rjs.state(16), color = rjs.state("black")
         return span(
             "Size: ",
             input({type: "range", min: 10, max: 36, value: size,
@@ -120,11 +132,36 @@
                     .map(c => option({value: c}, c)),
             ),
             // The <span> element below has a state-derived property `style`
-            span({style: () => `font-size: ${size}px; color: ${color};`}, " Hello 🍦trui"),
+            span({style: () => `font-size: ${size}px; color: ${color};`}, " Hello 🍦rjs"),
         )
     }
 
     document.body.append(FontPreview())
+
+    const rjsForm = () => {
+        const state = rjs.state({name:"Joe",age:21,profile:"/profile"});
+        return div({
+            oninput(event) {
+                state[event.target.name] = event.target.value;
+            }
+        }, () => {
+            return `Name: ${state.value.name} Age: ${state.value.age} Profile: ${state.val.profile} `;
+        },
+        () => {
+            return "Age: ";
+        },
+        () => {
+            return input({name:"age",type:"number",value:state.value.age});
+        },
+        () => {
+            return div({
+                style: `display:${state.value.age >=21 ? 'block' : 'none'}`
+            },() => {
+                return "Access is granted";
+            });
+        });
+    }
+    document.body.append(rjsForm());
 
 </script>
 
@@ -152,20 +189,26 @@
 <div id="selfref">Self Reference</div>
 
 <div id="person" data-name="Joe" data-age="21" href="/profile" title="Those 21 and older are eligible">
-    Name: ${name} Age: ${age} Profile: ${href} Eligible: ${age >= 21 ? "Yes" : "No"}
-    Age: <input name="age" type="number" value=${age} oninput="$update(event,'#person')">
+    Name: ${name} Age: ${age} Profile: ${href}
+    Age: <input name="age" type="number" value=${age} oninput="$data(event,'div:has(> input)')">
+    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+</div>
+
+<div id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+    Name: ${name} Age: ${age} Profile: ${href}
+    Age: <input name="age" type="number" value="${age}">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
 </div>
 
 <template id="test">
     <div>
-        <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$update(event)"></span>
+        <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$state(event)"></span>
         <span>Color:
-            <select name="color" oninput="$update(event)">
+            <select name="color" oninput="$state(event)">
                 <script defer>$closest("[name=color]").innerHTML = ["black","blue","green","red","brown"].map(value => `<option value="${value}">${value}</option>`).join("")</script>
             </select>
         </span>
-        <span style="font-size: ${size}px; color: ${color};">Hello 🍦trui</span>
+        <span style="font-size: ${size}px; color: ${color};">Hello 🍦rjs</span>
     </div>
 </template>
 <script>
@@ -173,13 +216,13 @@
 </script>
 
 <div id="fontpreview">
-    <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$update(event,'#fontpreview')"></span>
+    <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$state(event,'#fontpreview')"></span>
     <span>Color:
         <select name="color" oninput="fontpreview.dataset.color=event.target.value">
             <script defer>$closest('[name=color]').innerHTML = ["black","blue","green","red","brown"].map(value => `<option value="${value}">${value}</option>`).join("")</script>
         </select>
     </span>
-    <span style="font-size: ${size}px; color: ${color};">Hello 🍦trui</span>
+    <span style="font-size: ${size}px; color: ${color};">Hello 🍦rjs</span>
 </div>
 
 

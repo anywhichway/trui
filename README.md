@@ -6,25 +6,15 @@ Trui is a Tiny Reactive UI library for JavaScript.
 The closest comparable libraries are [VanJS](https://vanjs.org/) and [htmx](https://htmx.org/).
 
 You can think of `trui` as what might happen if VanJS and htmx had a baby:
-- It is slight larger than VanJS, but a lot smaller than htmx
-- It has all of VanJS's core capabilities, some of its extended capabilities, many of htmx's, and a couple of extra goodies
-- You can learn and use just the core for VanJS capabilities, or add the extras for htmx capabilities
-- You can also use some of the htmx capabilities standalone
+- It's `rjs.js` (reactive JavaScript) is API compatible with VanJS but slightly larger
+- All files combined are smaller than htmx
+- It has all of VanJS's core capabilities, and many of htmx's,
+- Most importantly, `trui` provides `rhtml.js`, reactive HTML templating without the need for developer JavaScript
 
-## Comparing trui and VanJS
+Learning and using `trui`
+- You can learn and use `rjs.js`, `rhtml.js`, or the htmx like `element-fetch.js` and `xon.js` separately or together. They know about and can leverage each other, but do not require each other.
 
-- trui core is 1,548 bytes minified and gzipped, while VanJS official number is 1,055
-- the combined size of trui core and htmx like add-ons is 2,792 bytes, less than half the size of htmx
-- trui core has a slightly smaller API surface than VanJS, it does not support `add` by default, but it can be added with an extension
-- trui has the additional aliases `observe`, `value`, and `peek` for the VanJS `derive`, `rawValue`, and `val` respectively
-- there are number of htmx capabilities that are not in trui, e.g. history management, form validity checking, animations
-- when resolving state values in templates, trui does not require accessing the `value` property, VanJS does, e.g. `console.log(`Counter: ${counter}`))` vs `console.log(`Counter: ${counter.val}`))`
-- if existing nodes are provided as child nodes, trui will move them into its scope, VanJS will not and throws an error
-- VanJS and HTMX are more mature, and have way more supporters, documentation, and add-ons
-- trui has a powerful addon for dynamic content loading that works similar to htmx, targets include inner, outer (replace), before begin, after begin, before end, after end
-- true provides an `oncreate` handler
-- trui does not have a TypeScript definition file
-- true does not currently have an SSR package
+
 
 ## Installation
 
@@ -34,19 +24,152 @@ npm install trui
 Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 
-### Examples ... a bit of a kitchen sink for now
+## Basic Examples
 
-Most of the examples are drawn from VanJS.
+### Reactive HTML Templates (rhtml.js)
 
-<script src="./src/rhtml.js"></script>
 ```!html
-<div id="person" data-name="Joe" data-age="21" href="/profile" title="Those 21 and older are eligible">
-    Name: ${name} Age: ${age} Profile: ${href} Eligible: ${age >= 21 ? "Yes" : "No"}
-    Age: <input name="age" type="number" value=${age} oninput="$update(event,'#person')">
+<script src="./src/rhtml.js"></script>
+<div id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age} <a href="${href}">Profile</a>
+    Age: <input name="age" type="number" value=${age} oninput="person.dataset.name=event.target.value">
+    <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
+</div>
+```
+
+By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
+
+```!html
+<script src="./src/rhtmlx.js"></script>
+<div data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age} Profile: ${href}
+    Age: <input name="age" type="number" value=${age} oninput="$data(event,'div:has(> input)')">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
 </div>
 ```
 
+Alternatively, you could handle the event at the top level:
+
+```!html
+<script src="./src/rhtmlx.js"></script>
+<div id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+    Name: ${name} Age: ${age} Profile: ${href}
+    Age: <input name="age" type="number" value="${age}">
+    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+</div>
+```
+
+```!html
+<script>
+const rhtmlCounter = () => {
+    return button({
+        onclick(event) {
+            this.state.count ||= 0;
+            this.state.count++;
+            // state would also be available as event.target.state
+        }
+    }, (state) => {
+        return state.count||=0
+    });
+}
+currentScript.insertAdjacentElement("afterend", rhtmlCounter());
+</script>
+```
+
+### Reactive JavaScript (rjs.js) - similar to VanJS
+
+Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
+
+```!html
+<script src="./src/rjs.js"></script>
+<script>
+const {button} = rjs.tags;
+const rjsCounter = () => {
+        const state = rjs.state(0);
+        return button({
+            onclick() {
+                state.value++;
+            }
+        }, () => {
+            return state.value
+        });
+    }
+currentScript.insertAdjacentElement("afterend", rjsCounter());
+</script>
+```
+
+Below we return to the eligibility example using private state instead of data attributes:
+
+```!html
+const {div} = rjs.tags;
+const rjsForm = () => {
+    const state = rjs.state({name:"Joe",age:21});
+    return div({
+        oninput(event) {
+            state.value[event.target.name] = event.target.value;
+        }
+    }, () => {
+        return `Name: ${state.value.name} Age: ${state.value.age}`;
+    },() => {
+        return div({
+            style: `display:${state.value.age >=21 ? 'block' : 'none'}`
+        },() => {
+            return "Access is granted";
+        });
+    });
+}
+currentScript.insertAdjacentElement("afterend", rjsForm());
+```
+
+### Element Fetch (element-fetch.js) - similar to htmx load
+
+```!html
+<script src="./src/element-fetch.js"></script>
+```
+
+### Xon (xon.js) - similar to htmx triggers
+
+```!html
+<script src="./src/xon.js"></script>
+<p target=">" xon='every:1000'>${new Date()}</p>
+```
+
+The `target` attribute is used to specify the target of the `xon` operation. The `>` means inner. Additional options include:
+- `<|` before begin
+- `|>` after begin
+- `>|` before end
+- `|>` after end
+- `<` outer, i.e. replace
+
+
+## Reactive HTML Templating
+
+
+## Reactive JavaScript
+
+
+## Element Fetch
+
+
+## Xon
+
+
+
+## Comparing trui wuth VanJS and htmx
+
+- trui `rjs.js` is 1,548 bytes minified and gzipped, while VanJS official number is 1,055
+- the combined size of `rjs.js` htmx like add-ons is 2,792 bytes, less than half the size of htmx
+- trui core has a slightly smaller API surface than VanJS, it does not support `add` by default, but it can be added with an extension
+- trui has the additional aliases `observe`, `value`, and `peek` for the VanJS `derive`, `rawValue`, and `val` respectively
+- there are number of htmx capabilities that are not in trui, e.g. history management, form validity checking, animations
+- when resolving state values in templates, trui does not require accessing the `value` property, VanJS does, e.g. `console.log(`Counter: ${counter}`))` vs `console.log(`Counter: ${counter.val}`))`
+- if existing nodes are provided as child nodes, trui will move them into its scope, VanJS will not and throws an error
+- neither VanJS or htmx provide a reactive HTML templating like `rhtml.js` and `rhtmlx.js`
+- VanJS and HTMX are more mature, and have way more supporters, documentation, and add-ons
+- trui has a powerful addon for dynamic content loading that works similar to htmx, targets include inner, outer (replace), before begin, after begin, before end, after end
+- true provides an `oncreate` handler
+- trui does not have a TypeScript definition file
+- true does not currently have an SSR package
 
 ## Roadmap
 
@@ -59,6 +182,13 @@ Post ideas at https://github.com/anywhichway/trui/issues
 MIT
 
 ## Release History (Reverse chronological order)
+
+v0.0.5a 2024-04-31
+
+- added `rhtml.js` to provide reactive HTML templating
+- added `rhtmlx.js` to provide utility functions for `rhtml.js`
+- renamed `trui.js` to `rjs.js`
+- improved documentation
 
 v0.0.4a 2024-04-28
 
