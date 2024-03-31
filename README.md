@@ -30,7 +30,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 ## Basic Examples
 
-### Reactive HTML Templates (rhtml.js)
+### Reactive HTML Templates (rhtml.js 1316 bytes)
 
 
 
@@ -50,7 +50,7 @@ Set age to greater than or equal 21 to see the Access Granted message.
 </p>
 ```
 
-By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
+By loading `rhtmx.js` (804 bytes) you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
 
 
 ```!html
@@ -62,7 +62,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 ```
 
 
-### Reactive JavaScript (rjs.js) - similar to VanJS
+### Reactive JavaScript (rjs.js 1600 bytes) - similar to VanJS
 
 Whereas states cannot be private with `rhtml.js`, they are a property of each element, with `rjs.js` they can be private.
 
@@ -130,16 +130,16 @@ var rjsForm = () => {
 document.currentScript.insertAdjacentElement("afterend", rjsForm());
 ```
 
-### Element Fetch (element-fetch.js) - similar to htmx load
+### Element Fetch (element-fetch.js 1148 bytes) - similar to htmx load
 
 ```!html
 <script src="./src/element-fetch.js"></script>
 ```
 
-### Xon (xon.js) - similar to htmx triggers
+### Xon (xon.js 1304 bytes) - similar to htmx triggers
 
 ```!html
-<p target=">" x-on='every:1000'>${new Date()}</p>
+<p style="border:1px solid black;padding:5px" target=">" x-on='every:1000' >${new Date()}</p>
 ```
 
 The `target` attribute is used to specify the target of the `xon` operation. The `>` means inner. Additional options include:
@@ -243,6 +243,10 @@ Post ideas at https://github.com/anywhichway/trui/issues
 MIT
 
 ## Release History (Reverse chronological order)
+
+v0.0.6a 2024-04-31
+
+- improved documentation
 
 v0.0.5a 2024-04-31
 
