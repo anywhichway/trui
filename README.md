@@ -39,23 +39,13 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 <p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.age=event.target.value">
-    <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
+    <span style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
 </p>
 ```
 
 By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
 
 <script src="./src/rhtmlx.js"></script>
-```!html
-<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
-    Name: ${name} Age: ${age}
-    <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
-    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
-</p>
-```
-
-Alternatively, you could handle the event at the top level:
-
 ```!html
 <p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
@@ -155,6 +145,49 @@ The `target` attribute is used to specify the target of the `xon` operation. The
 
 
 ## Reactive HTML Templating
+
+### $attribute
+
+`$attribute` is a utility function that can be used to update the attributes of an element. It is capable of accomplishing 3 things:
+1. Binding to the element for which the attribute needs to be updated
+2. Mapping the name of an input element to the attribute key, or taking an override
+3. Setting an attribute value (which may cause a reactive response)
+
+`$attribute` is polymorphic. These are the signatures:
+- `$attribute(event:Event,selector:string|boolean,{property:string,value:any,stop:boolean=true})`
+- `$attribute(element:HTMLElement,selector:string|boolean,{property:string,value:any,stop:boolean=true})`
+- `$attribute(selector:string,{property:string,value:any,stop:boolean})`
+
+`event` is the event that triggered the update
+- By default `property` will be set to the value of the `name` attribute of the element that produced the event.
+- By default `value` will be set to the `value` attribute or property of the element that produced the event.
+- The `currentTarget` of the event is the element for which the attribute should be set.
+
+`element` is the element on from which the closest matching parent should be found, unless `selector` is `false`, in 
+which case it will be the element on which the attribute value will be set. Values for `property` (the attribute name)
+and `value` must be provided.
+
+`selector` is used to find the element to which the attribute should be applied.
+- If `false` the target of the event is the target. 
+- If `true` (only used for elements hosting a shadowDOM), the shadow host, i.e. the hosting element, is returned
+- If it is a string, it is a CSS selector that is used to select the closest matching parent
+
+
+
+### $data
+
+`$data` accomplishes the same three things as `$attribute` but for the `dataset`.
+
+Like 
+
+```!html
+<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age}
+    <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
+    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
+</p>
+```
+
 
 
 ## Reactive JavaScript
