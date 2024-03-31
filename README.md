@@ -29,7 +29,6 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 <script src="./src/rhtml.js"></script>
 ```!html
-<script src="./src/rhtml.js"></script>
 <div id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} <a href="${href}">Profile</a>
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.name=event.target.value">
@@ -41,7 +40,6 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 
 <script src="./src/rhtmlx.js"></script>
 ```!html
-<script src="./src/rhtmlx.js"></script>
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} Profile: ${href}
     Age: <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
@@ -52,7 +50,6 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 Alternatively, you could handle the event at the top level:
 
 ```!html
-<script src="./src/rhtmlx.js"></script>
 <p id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age} Profile: ${href}
     Age: <input name="age" type="number" value="${age}">
@@ -82,7 +79,7 @@ document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
 
 <script src="./src/rjs.js"></script>
-const {button,div,p} = rjs.tags;
+<script>var {button,div,p} = rjs.tags;</script>
 ```!javascript
 var rjsCounter = () => {
         const state = rjs.state(0);
@@ -127,9 +124,9 @@ document.currentScript.insertAdjacentElement("afterend", rjsForm());
 
 ### Xon (xon.js) - similar to htmx triggers
 
-```!html
 <script src="./src/xon.js"></script>
-<p target=">" xon='every:1000'>${new Date()}</p>
+```!html
+<p target=">" x-on='every:1000'>${new Date()}</p>
 ```
 
 The `target` attribute is used to specify the target of the `xon` operation. The `>` means inner. Additional options include:
