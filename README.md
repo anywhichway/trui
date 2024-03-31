@@ -43,7 +43,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 Set age to greater than or equal 21 to see the Access Granted message.
 
 ```!html
-<p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+<p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="21 and older are eligible">
     Name: ${name} Age: ${age}
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.age=event.target.value">
     <span style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
@@ -54,7 +54,7 @@ By loading `rhtmx.js` (804 bytes) you can get utility functions like `$data`, `$
 
 
 ```!html
-<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value="${age}">
     <span style="display:${age >=21 ? '' : 'none'}">Access is granted</span>
@@ -187,10 +187,10 @@ See `$data` below for an example.
 Here is the same content as used in the simple examples, but with a selector to find the `p` element with `data` attribute:
 
 ```!html
-<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="21 and older are eligible">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
-    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
+    <span style="display:${age >=21 ? '' : 'none'}">Access is granted</span>
 </p>
 ```
 
