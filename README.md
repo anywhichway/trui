@@ -29,7 +29,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 <script src="./src/rhtml.js"></script>
 ```!html
-<p id="person" style="border:1px solid black" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+<p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.age=event.target.value">
     <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
@@ -40,7 +40,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 
 <script src="./src/rhtmlx.js"></script>
 ```!html
-<p style="border:1px solid black" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
     <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
@@ -50,7 +50,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 Alternatively, you could handle the event at the top level:
 
 ```!html
-<p style="border:1px solid black" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+<p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value="${age}">
     <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
@@ -67,7 +67,7 @@ var rhtmlCounter = () => {
             // state would also be available as event.target.state
         }
     }, (state) => {
-        return state.count||=0
+        return `Click Count: ${state.count||=0}`
     });
 }
 document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
@@ -88,7 +88,7 @@ var rjsCounter = () => {
                 state.value++;
             }
         }, () => {
-            return state.value
+            return `Click Count: ${state.value}`
         });
     }
 document.currentScript.insertAdjacentElement("afterend", rjsCounter());
@@ -103,7 +103,7 @@ var rjsForm = () => {
         oninput(event) {
             state.value[event.target.name] = event.target.value;
         },
-        style: "border:1px solid black"
+        style: "border:1px solid black; padding:5px"
     }, () => {
         return `Name: ${state.value.name} Age: ${state.value.age}`;
     },() => { 
