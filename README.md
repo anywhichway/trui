@@ -105,7 +105,13 @@ var rjsForm = () => {
         }
     }, () => {
         return `Name: ${state.value.name} Age: ${state.value.age}`;
-    },() => {
+    },() => { 
+        return input({
+            name: "age",
+            type: "number",
+            value: state.value.age
+        });,
+    () => {
         return div({
             style: `display:${state.value.age >=21 ? 'block' : 'none'}`
         },() => {
