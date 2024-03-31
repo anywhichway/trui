@@ -1,7 +1,5 @@
-# trui
-Tiny Reactive UI
+# trui - Tiny Reactive UI For JavaScript
 
-Trui is a Tiny Reactive UI library for JavaScript.
 
 If you are viewing this as a README.md, visit https://anywhichway.github.io/trui/ for a more interactive experience.
 
@@ -15,7 +13,6 @@ You can think of `trui` as what might happen if VanJS and htmx had a baby:
 
 Learning and using `trui`
 - You can learn and use `rjs.js`, `rhtml.js`, or the htmx like `element-fetch.js` and `xon.js` separately or together. They know about and can leverage each other, but do not require each other.
-
 
 
 ## Installation
@@ -85,10 +82,8 @@ document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
 
 <script src="./src/rjs.js"></script>
-```!html
-<script src="./src/rjs.js"></script>
-<script>
-const {button} = rjs.tags;
+const {button,div,p} = rjs.tags;
+```!javascript
 const rjsCounter = () => {
         const state = rjs.state(0);
         return button({
@@ -100,13 +95,11 @@ const rjsCounter = () => {
         });
     }
 document.currentScript.insertAdjacentElement("afterend", rjsCounter());
-</script>
 ```
 
 Below we return to the eligibility example using private state instead of data attributes:
 
-```!html
-const {div,p} = rjs.tags;
+```!javascript
 const rjsForm = () => {
     const state = rjs.state({name:"Joe",age:21});
     return p({
