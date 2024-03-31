@@ -28,6 +28,13 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 ### Reactive HTML Templates (rhtml.js)
 
 <script src="./src/rhtml.js"></script>
+
+```!html
+<p style="border:1px solid black;padding:5px">
+<button onclick="(this.state.counter||=0)++">Click Count: ${counter}</button>
+</p>
+```
+
 ```!html
 <p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age}
@@ -57,26 +64,10 @@ Alternatively, you could handle the event at the top level:
 </p>
 ```
 
-```!html
-<script>
-var rhtmlCounter = () => {
-    return button({
-        onclick(event) {
-            this.state.count ||= 0;
-            this.state.count++;
-            // state would also be available as event.target.state
-        }
-    }, (state) => {
-        return `Click Count: ${state.count||=0}`
-    });
-}
-document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
-</script>
-```
 
 ### Reactive JavaScript (rjs.js) - similar to VanJS
 
-Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
+Whereas states cannot be private with `rhtml.js`, they are a property of each element, with `rjs.js` they can be private.
 
 <script src="./src/rjs.js"></script>
 <script>var {button,input,span,p} = rjs.tags;</script>
@@ -92,6 +83,25 @@ var rjsCounter = () => {
         });
     }
 document.currentScript.insertAdjacentElement("afterend", rjsCounter());
+```
+
+However, you can use the public state if you wish:
+
+```!html
+<script>
+var rhtmlCounter = () => {
+    return button({
+        onclick(event) {
+            this.state.count ||= 0;
+            this.state.count++;
+            // state would also be available as event.target.state
+        }
+    }, (state) => {
+        return `Click Count: ${state.count||=0}`
+    });
+}
+document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
+</script>
 ```
 
 Below we return to the eligibility example using private state instead of data attributes:
