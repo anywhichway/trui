@@ -4,14 +4,7 @@
 <script>var {button,input,span,p} = rjs.tags;</script>
 <script src="./src/xon.js"></script>
 
-```
-[]: # 
-[]: # 
-[]: # Will be turned into this:
-[]: # 
-[]: # ```markdown
 # trui - Tiny Reactive UI For JavaScript
-
 
 If you are viewing this as a README.md, visit https://anywhichway.github.io/trui/ for a more interactive experience.
 
@@ -283,9 +276,8 @@ v0.0.1a 2024-04-27 Initial release
         if (document.readyState === "complete") {
             clearInterval(interval);
             examplify(document);
-debugger;
             xon.activateDOM();
-            document.body.render();
+            document.body.resolve();
         }
     });
     const interval = onload();
