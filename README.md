@@ -38,6 +38,15 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 Most of the examples are drawn from VanJS.
 
+```!html
+<script src="../src/rhtml.js"></script>
+<div id="person" data-name="Joe" data-age="21" href="/profile" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age} Profile: ${href} Eligible: ${age >= 21 ? "Yes" : "No"}
+    Age: <input name="age" type="number" value=${age} oninput="$update(event,'#person')">
+    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+</div>
+```
+
 ```html
 <body>
 <script type="module">
