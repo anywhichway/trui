@@ -31,7 +31,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 ```!html
 <p style="border:1px solid black;padding:5px">
-<button onclick="(this.state.counter||=0)++">Click Count: ${counter}</button>
+<button onclick="this.state.counter||=0;this.state.counter++">Click Count: ${counter}</button>
 </p>
 ```
 
@@ -52,7 +52,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 <p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
     <input name="age" type="number" value="${age}">
-    <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
+    <span style="display:${age >=21 ? '' : 'none'}">Access is granted</span>
 </p>
 ```
 
