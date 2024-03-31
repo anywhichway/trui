@@ -29,11 +29,11 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 <script src="./src/rhtml.js"></script>
 ```!html
-<div id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
+<p id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} <a href="${href}">Profile</a>
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.name=event.target.value">
     <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
-</div>
+</p>
 ```
 
 By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
@@ -50,7 +50,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 Alternatively, you could handle the event at the top level:
 
 ```!html
-<p id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+<p data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age} Profile: ${href}
     Age: <input name="age" type="number" value="${age}">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
