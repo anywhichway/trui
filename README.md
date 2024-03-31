@@ -30,6 +30,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 ### Reactive HTML Templates (rhtml.js)
 
+<script src="./src/rhtml.js"></script>
 ```!html
 <script src="./src/rhtml.js"></script>
 <div id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
@@ -41,6 +42,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
 
+<script src="./src/rhtmlx.js"></script>
 ```!html
 <script src="./src/rhtmlx.js"></script>
 <p data-name="Joe" data-age="21" title="Those 21 and older are eligible">
@@ -82,6 +84,7 @@ document.currentScript.insertAdjacentElement("afterend", rhtmlCounter());
 
 Whereas states cannot be private with `rhtml,js`, they are a property of each element, with `rjs.js` they can be private.
 
+<script src="./src/rjs.js"></script>
 ```!html
 <script src="./src/rjs.js"></script>
 <script>
