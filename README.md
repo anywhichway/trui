@@ -31,7 +31,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 ```!html
 <p id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} <a href="${href}">Profile</a>
-    Age: <input name="age" type="number" value=${age} oninput="person.dataset.name=event.target.value">
+    Age: <input name="age" type="number" value=${age} oninput="person.dataset.age=event.target.value">
     <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
 </p>
 ```
