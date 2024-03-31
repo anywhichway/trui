@@ -56,7 +56,7 @@
                 t.replaceWith(s);
                 window.currentElement = null;
             }
-        } else {
+        } else if(t.tagName!=="CODE") {
             t.normalize();
             for (const attr of t.attributes) if ((attr._$ ||= attr.value).includes("${")) t.setAttribute(attr.name, resolve(attr._$, root||t));
             const childNodes = t.shadowRoot ? t.shadowRoot.childNodes : t.childNodes;
