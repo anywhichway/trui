@@ -38,7 +38,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 Most of the examples are drawn from VanJS.
 
-<script src="../src/rhtml.js"></script>
+<script src="./src/rhtml.js"></script>
 ```!html
 <div id="person" data-name="Joe" data-age="21" href="/profile" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} Profile: ${href} Eligible: ${age >= 21 ? "Yes" : "No"}
