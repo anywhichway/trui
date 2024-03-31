@@ -146,7 +146,7 @@ The `target` attribute is used to specify the target of the `xon` operation. The
 - `<` outer, i.e. replace
 
 
-## Reactive HTML Templating
+## Reactive HTML Templating (requires loading `rhtml.js`)
 
 ### $attribute (requires loading `rhtmlx.js`)
 
@@ -174,17 +174,13 @@ and `value` must be provided.
 - If `true` (only used for elements hosting a shadowDOM), the shadow host, i.e. the hosting element, is returned
 - If it is a string, it is a CSS selector that is used to select the closest matching parent
 
+See `$data` below for an example.
 
 ### $data (requires loading `rhtmlx.js`)
 
 `$data` accomplishes the same three things as `$attribute` but for the `dataset`.
 
-
-### $state (requires loading `rhtmlx.js`)
-
-`$state` accomplishes the same three things as `$attribute` but for the `state`.
-
-Like 
+Here is the same content as used in the simple examples, but with a selector to find the `p` element with `data` attribute:
 
 ```!html
 <p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
@@ -193,6 +189,16 @@ Like
     <span style="display:${age >=21 ? 'block' : 'none'}">Access is granted</span>
 </p>
 ```
+
+If you have a complex structure, you can create dynamic selectors with string templates, e.g. `p[data-${event.target.name}]:has(> input)`.
+
+
+### $state (requires loading `rhtmlx.js`)
+
+`$state` accomplishes the same three things as `$attribute` but for the `state`.
+
+
+
 
 
 
@@ -266,6 +272,7 @@ v0.0.1a 2024-04-27 Initial release
         if (document.readyState === "complete") {
             clearInterval(interval);
             examplify(document);
+            xon.activateDOM();
         }
     });
     const interval = onload();

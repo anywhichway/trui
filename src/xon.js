@@ -121,8 +121,13 @@
             }, opts)
         }
     }
-    HTMLElement.prototype.xon = xon;
+    window.xon = HTMLElement.prototype.xon = xon;
 
+    xon.activateDOM = () => {
+        [...document.querySelectorAll('[xon]'), ...document.querySelectorAll('[x-on]')].forEach(el => {
+            xon(el, el.getAttribute('xon') || el.getAttribute('x-on'), typeof rjs === "function" ? rjs.ctx : {})
+        });
+    }
     /*const onload = () => setInterval(() => {
         if (document.readyState === "complete") {
             clearInterval(interval);
@@ -132,9 +137,5 @@
         }
     });
     const interval = onload();*/
-    document.addEventListener('DOMContentLoaded', () => {
-        [...document.querySelectorAll('[xon]'), ...document.querySelectorAll('[x-on]')].forEach(el => {
-            xon(el, el.getAttribute('xon') || el.getAttribute('x-on'), typeof rjs === "function" ? rjs.ctx : {})
-        });
-    });
+    document.addEventListener('DOMContentLoaded', xon.activateDOM);
 })();
