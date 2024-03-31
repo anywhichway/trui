@@ -31,7 +31,8 @@
         resolve = (str, node) => {
             try {
                 return new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node))
-            } catch {
+            } catch(e) {
+                console.error(e);
                 return str;
             }
         },

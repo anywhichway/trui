@@ -4,7 +4,7 @@
 <script>var {button,input,span,p} = rjs.tags;</script>
 <script src="./src/xon.js"></script>
 
-# trui - Tiny Reactive UI For JavaScript
+# Tiny Reactive UI For JavaScript
 
 If you are viewing this as a README.md, visit https://anywhichway.github.io/trui/ for a more interactive experience.
 
@@ -40,7 +40,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 </p>
 ```
 
-Change the age to greater than or equal 21 to see the message the content change.
+Set age to greater than or equal 21 to see the Access Granted message.
 
 ```!html
 <p id="person" style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
@@ -121,7 +121,7 @@ var rjsForm = () => {
         });
     }, () => {
         return span({
-            style: `display:${state.age >=21 ? 'block' : 'none'}`
+            style: `display:${state.age >=21 ? '' : 'none'}`
         },() => {
             return "Access is granted";
         });
