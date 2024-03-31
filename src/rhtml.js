@@ -22,7 +22,13 @@
                 has: () => true
             });
         },
-        resolve = (str, node) => str.includes("${") ? new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node)) : str,
+        resolve = (str, node) => {
+            try {
+                return str.includes("${") ? new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node)) : str
+            } catch {
+                return str;
+            }
+        },
         Hp = HTMLElement.prototype,
         sa = Hp.setAttribute,
         dataset = Object.getOwnPropertyDescriptor(Hp,"dataset");
