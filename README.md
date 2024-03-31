@@ -85,6 +85,7 @@ v0.0.1a 2024-04-27 Initial release
         if (document.readyState === "complete") {
             clearInterval(interval);
             examplify(document);
+            document.body.resolve(true);
         }
     });
     const interval = onload();
