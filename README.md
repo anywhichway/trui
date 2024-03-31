@@ -29,8 +29,8 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 <script src="./src/rhtml.js"></script>
 ```!html
-<p id="person" data-name="Joe" data-age="21" data-profile="/profile" title="Those 21 and older are eligible">
-    Name: ${name} Age: ${age} <a href="${href}">Profile</a>
+<p id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age}
     Age: <input name="age" type="number" value=${age} oninput="person.dataset.age=event.target.value">
     <div style="display:${age >=21 ? '' : 'none'}">Access is granted</div>
 </p>
