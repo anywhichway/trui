@@ -1,3 +1,15 @@
+<script src="./src/rhtml.js"></script>
+<script src="./src/rhtmlx.js"></script>
+<script src="./src/rjs.js"></script>
+<script>var {button,input,span,p} = rjs.tags;</script>
+<script src="./src/xon.js"></script>
+
+```
+[]: # 
+[]: # 
+[]: # Will be turned into this:
+[]: # 
+[]: # ```markdown
 # trui - Tiny Reactive UI For JavaScript
 
 
@@ -27,7 +39,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 ### Reactive HTML Templates (rhtml.js)
 
-<script src="./src/rhtml.js"></script>
+
 
 ```!html
 <p style="border:1px solid black;padding:5px">
@@ -47,7 +59,7 @@ Change the age to greater than or equal 21 to see the message the content change
 
 By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `$attribute` to facilitate data updates and reactive rendering. 
 
-<script src="./src/rhtmlx.js"></script>
+
 ```!html
 <p style="border:1px solid black;padding:5px" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age}
@@ -61,7 +73,7 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 
 Whereas states cannot be private with `rhtml.js`, they are a property of each element, with `rjs.js` they can be private.
 
-<script src="./src/rjs.js"></script>
+
 <script>var {button,input,span,p} = rjs.tags;</script>
 ```!javascript
 var rjsCounter = () => {
@@ -133,7 +145,6 @@ document.currentScript.insertAdjacentElement("afterend", rjsForm());
 
 ### Xon (xon.js) - similar to htmx triggers
 
-<script src="./src/xon.js"></script>
 ```!html
 <p target=">" x-on='every:1000'>${new Date()}</p>
 ```

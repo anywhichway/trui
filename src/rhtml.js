@@ -19,7 +19,11 @@
                         const value = target.getAttribute(prop);
                         return value==="" || value==="true" ? true : parse(value);
                     }
-                    return target.parentElement ? ctx(target.parentElement)[prop] : window[prop];
+                    if(target.parentElement) {
+                        const value = ctx(target.parentElement)[prop];
+                        if(value!=null) return value;
+                    }
+                    return window[prop];
                 },
                 has: () => true
             });
