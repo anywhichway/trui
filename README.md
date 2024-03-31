@@ -31,7 +31,7 @@ Then use the `trui.js` or `trui.min.js` file in the root directory.
 
 ```!html
 <p style="border:1px solid black;padding:5px">
-<button onclick="this.state.counter||=0;this.state.counter++">Click Count: ${counter}</button>
+<button onclick="this.state.counter||=0;this.state.counter++">Click Count: ${counter||0}</button>
 </p>
 ```
 
