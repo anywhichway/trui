@@ -150,9 +150,9 @@ The `target` attribute is used to specify the target of the `xon` operation. The
 - `<` outer, i.e. replace
 
 
-## Reactive HTML Templating (requires loading `rhtml.js`)
+## Reactive HTML Templating (`rhtml.js`)
 
-### $attribute (requires loading `rhtmlx.js`)
+### $attribute (`rhtmlx.js`)
 
 `$attribute` is a utility function that can be used to update the attributes of an element. It is capable of accomplishing 3 things:
 1. Binding to the element for which the attribute needs to be updated
@@ -180,7 +180,7 @@ and `value` must be provided.
 
 See `$data` below for an example.
 
-### $data (requires loading `rhtmlx.js`)
+### $data (`rhtmlx.js`)
 
 `$data` accomplishes the same three things as `$attribute` but for the `dataset`.
 
@@ -197,22 +197,22 @@ Here is the same content as used in the simple examples, but with a selector to 
 If you have a complex structure, you can create dynamic selectors with string templates, e.g. `p[data-${event.target.name}]:has(> input)`.
 
 
-### $state (requires loading `rhtmlx.js`)
+### $state (`rhtmlx.js`)
 
 `$state` accomplishes the same three things as `$attribute` but for the `state`.
 
 
+## Reactive JavaScript (`rjs.js`)
 
+Can be used standalone or with any other `trui` files.
 
+## Element Fetch (`element-fetch.js`)
 
+Can be used standalone or with any other `trui` files.
 
-## Reactive JavaScript
+## Xon (`xon.js`)
 
-
-## Element Fetch
-
-
-## Xon
+Can be used standalone or with any other `trui` files.
 
 
 

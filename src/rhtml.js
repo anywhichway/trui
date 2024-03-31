@@ -13,7 +13,7 @@
             return new Proxy(el, {
                 get: (target, prop) => {
                     if(typeof prop === "symbol") return Reflect.get(el, prop);
-                    if(target.state[prop]!==undefined) return target.state[prop];
+                    if(target.state && target.state[prop]!==undefined) return target.state[prop];
                     if(target.dataset && target.dataset[prop]!==undefined) return parse(target.dataset[prop]);
                     if(target.hasAttribute && target.hasAttribute(prop)) {
                         const value = target.getAttribute(prop);
