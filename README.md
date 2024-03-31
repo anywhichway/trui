@@ -185,7 +185,6 @@ Most of the examples are drawn from VanJS.
 Post ideas at https://github.com/anywhichway/trui/issues
 
 - Add a `trui-ssr` package
-- Add the ability to interpolate HTML directly, e.g. `div`<span>Counter: ${counter}</span>`</div>` actually in an HTML file not in JavaScript
 
 ## License
 
@@ -211,6 +210,17 @@ v0.0.1a 2024-04-27 Initial release
 
 - I do not expect trui will get any larger, and if it does it will only be by a few bytes
 - The architecture for adding functionality without increasing core size more than a few bytes is in place, see the use of `load` in the examples
+
+<script type="module">
+    import {examplify} from 'https://unpkg.com/examplify?module';
+    const onload = () => setInterval(() => {
+        if (document.readyState === "complete") {
+            clearInterval(interval);
+            examplify(document);
+        }
+    });
+    const interval = onload();
+</script>
 
 
 

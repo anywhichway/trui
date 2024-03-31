@@ -5,13 +5,12 @@
     <title>trui:Kitchen Sink Example</title>
 </head>
 <body>
+<script src="../src/element-fetch.js"></script>
+<script src="../src/rhtml.js"></script>
+<script src="../src/xon.js"></script>
+<script src="../src/trui.js"></script>
+<script src="../src/component.js"></script>
 <script type="module">
-    import {trui} from '../src/trui.js';
-    import {load} from '../src/load.js';
-    import {add} from '../src/add.js';
-    import {xon} from '../src/xon.js';
-    trui({load,add,xon});
-
     const {button,input,div, sup} = trui.tags;
 
     const myButton = () => {
@@ -121,7 +120,7 @@
                     .map(c => option({value: c}, c)),
             ),
             // The <span> element below has a state-derived property `style`
-            span({style: () => `font-size: ${size.value}px; color: ${color.value};`}, " Hello 🍦trui"),
+            span({style: () => `font-size: ${size}px; color: ${color};`}, " Hello 🍦trui"),
         )
     }
 
@@ -129,19 +128,60 @@
 
 </script>
 
-<p x-href="/examples/header.html" target=">" onclick="this.load()">Header Placeholder (Click Me)</p>
+<p x-href="/examples/header.html" target=">" onclick="this.fetch()">Header Placeholder (Click Me)</p>
 
-<p x-href="/examples/messages.html#peekaboo" target=">" x-on='mouseover ephemeral:1000 throttle:2000 load:{"options":{"method":"GET"}}'>Message (Mouseover Me)</p>
+<div x-href="#selfref" target=">" onload="this.fetch()">Self Ref Placeholder</div>
+<div x-href="#selfref" target="<|" onload="this.fetch()">Before Begin &lt;|</div>
+<div x-href="#selfref" target="|<" onload="this.fetch()">After Begin |&lt;</div>
+<div x-href="#selfref" target="::before" onload="this.fetch()">After Begin ::before</div>
+<div x-href="#selfref" target=">|" onload="this.fetch()">Before End &gt;|</div>
+<div x-href="#selfref" target="::after" onload="this.fetch()">Before End ::after</div>
+<div x-href="#selfref" target="|>" onload="this.fetch()">After End |&gt;</div>
+<div x-href="#selfref" target="#other" onload="this.fetch()">Not Replaced</div>
+<div id="other">Other Replaced</div>
 
-<p target=">" x-on='every:2000 html:Date.now'>Timer</p>
+<div x-href="ws://localhost:10001#selfref" target=">" onload="this.fetch({options:{body:'Test Message'}})">WS Message</div>
 
-<script type="module">
-    import {trui} from '../src/trui.js';
-    import {load} from '../src/load.js';
-    import {xon} from '../src/xon.js';
-    load.patchDOM();
-    xon.patchDOM(document.body,trui.ctx);
+
+<p href="/examples/messages.html#peekaboo" target=">" x-on='mouseover ephemeral:1000 throttle:2000 fetch:{"options":{"method":"GET"}}'>Message (Mouseover Me)</p>
+
+<!--p target=">" x-on='every:2000 html:Date.now'>Timer</p-->
+
+<p target=">" xon='every:1000'>${new Date()}</p>
+
+<div id="selfref">Self Reference</div>
+
+<div id="person" data-name="Joe" data-age="21" href="/profile" title="Those 21 and older are eligible">
+    Name: ${name} Age: ${age} Profile: ${href} Eligible: ${age >= 21 ? "Yes" : "No"}
+    Age: <input name="age" type="number" value=${age} oninput="$update(event,'#person')">
+    <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
+</div>
+
+<template id="test">
+    <div>
+        <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$update(event)"></span>
+        <span>Color:
+            <select name="color" oninput="$update(event)">
+                <script defer>$closest("[name=color]").innerHTML = ["black","blue","green","red","brown"].map(value => `<option value="${value}">${value}</option>`).join("")</script>
+            </select>
+        </span>
+        <span style="font-size: ${size}px; color: ${color};">Hello 🍦trui</span>
+    </div>
+</template>
+<script>
+    component("test",{target:document.body,mode:"open"});
 </script>
-</body>
+
+<div id="fontpreview">
+    <span>Size: <input name="size" type="range" min="10" max="36" value="16" oninput="$update(event,'#fontpreview')"></span>
+    <span>Color:
+        <select name="color" oninput="fontpreview.dataset.color=event.target.value">
+            <script defer>$closest('[name=color]').innerHTML = ["black","blue","green","red","brown"].map(value => `<option value="${value}">${value}</option>`).join("")</script>
+        </select>
+    </span>
+    <span style="font-size: ${size}px; color: ${color};">Hello 🍦trui</span>
+</div>
+
+
 </body>
 </html>
