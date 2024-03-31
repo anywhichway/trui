@@ -41,22 +41,22 @@ By loading `rhtmx.js` you can get utility functions like `$data`, `$state` and `
 
 ```!html
 <script src="./src/rhtmlx.js"></script>
-<div data-name="Joe" data-age="21" title="Those 21 and older are eligible">
+<p data-name="Joe" data-age="21" title="Those 21 and older are eligible">
     Name: ${name} Age: ${age} Profile: ${href}
-    Age: <input name="age" type="number" value=${age} oninput="$data(event,'div:has(> input)')">
+    Age: <input name="age" type="number" value=${age} oninput="$data(event,'p:has(> input)')">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
-</div>
+</p>
 ```
 
 Alternatively, you could handle the event at the top level:
 
 ```!html
 <script src="./src/rhtmlx.js"></script>
-<div id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
+<p id="person" data-name="Joe" data-age="21" title="Those 21 and older are eligible" oninput="$data(event,false)">
     Name: ${name} Age: ${age} Profile: ${href}
     Age: <input name="age" type="number" value="${age}">
     <div style="display:${age >=21 ? 'block' : 'none'}">Access is granted</div>
-</div>
+</p>
 ```
 
 ```!html
@@ -101,10 +101,10 @@ currentScript.insertAdjacentElement("afterend", rjsCounter());
 Below we return to the eligibility example using private state instead of data attributes:
 
 ```!html
-const {div} = rjs.tags;
+const {div,p} = rjs.tags;
 const rjsForm = () => {
     const state = rjs.state({name:"Joe",age:21});
-    return div({
+    return p({
         oninput(event) {
             state.value[event.target.name] = event.target.value;
         }
