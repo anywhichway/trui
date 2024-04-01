@@ -7,20 +7,19 @@
                 return value;
             }
         },
-        ctx = (node) => {
-            const el = node.ownerElement || node.parentNode;
-            if(!el) return new Proxy({}, {get: () => undefined,has: () => true});
-            return new Proxy(el, {
+        ctx = (node,recursing=0) => {
+            return new Proxy(node.ownerElement || node || {}, {
                 get: (target, prop) => {
-                    if(typeof prop === "symbol") return Reflect.get(el, prop);
+                    if(typeof prop === "symbol") return Reflect.get(target, prop);
+                    if(recursing<=1 && target[prop]!==undefined) return target[prop];
                     if(target.state && target.state[prop]!==undefined) return target.state[prop];
-                    if(target.dataset && target.dataset[prop]!==undefined) return parse(target.dataset[prop]);
-                    if(target.hasAttribute && target.hasAttribute(prop)) {
+                    if(recursing<=1 && target.dataset && target.dataset[prop]!==undefined) return parse(target.dataset[prop]);
+                    if(recursing<=1 && target.hasAttribute && target.hasAttribute(prop)) {
                         const value = target.getAttribute(prop);
                         return value==="" || value==="true" ? true : parse(value);
                     }
                     if(target.parentElement) {
-                        const value = ctx(target.parentElement)[prop];
+                        const value = ctx(target.parentElement,recursing+1)[prop];
                         if(value!=null) return value;
                     }
                     return window[prop];
@@ -32,7 +31,7 @@
             try {
                 return new Function('c', 'with(c){return `' + str + '`}').call(globalThis,ctx(node))
             } catch(e) {
-                console.error(e);
+                //console.error(e);
                 return str;
             }
         },

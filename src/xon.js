@@ -30,7 +30,7 @@
             return functions.throttle(ev, ms)
         },
         async fetch(ev, options) {
-            await this.fetch(options);
+            await this.fetch(ev,options);
             return true;
         },
         preventDefault(ev) {
@@ -66,7 +66,8 @@
                 return opts;
             }, {}),
             mods = parts.filter(p => p.includes(":") || ["preventDefault", "stop", "stopImmediate"].includes(p)).reduce((mods, mod) => {
-                    let [f, arg] = mod.split(":");
+                    let [f, ...args] = mod.split(":"),
+                        arg = args.join(":");
                     if (functions[f]) {
                         try {
                             arg = JSON.parse(arg);

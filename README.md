@@ -150,7 +150,71 @@ The `target` attribute is used to specify the target of the `xon` operation. The
 - `<` outer, i.e. replace
 
 
-## Reactive HTML Templating (`rhtml.js`)
+## Reactive HTML (`rhtml.js`)
+
+With reactive html, you can use the JavaScript `${}` syntax directly in your HTML.
+
+- Attributes and `dataset` values are automatically reactive if they are referenced within `${}`.
+- A `state` property is added to all `HTMLElement` objects. Unlike the `dataset` property, `state` can contain values of any type including nested objects and functions.
+- All element can use an `href` and `target` attribute, or alternatively `x-href` and `x-target` for compliance with the HTML standard.
+- Under certain conditions, you can dispense with SSR by making a relatively minor change to you HTML authoring approach.
+
+### Reactive Attributes, Datasets, and States
+
+```!html
+<p style="border:1px solid black;padding:5px">
+    <button name="Greetings!!"
+            onclick="this.getAttribute('name')=='Greetings!!' ? this.setAttribute('name','Goodbye...') : this.setAttribute('name','Greetings!!')">
+        ${name}
+    </button> Attribute Update<br>
+    <button data-counter="0" onclick="this.dataset.counter++">Click Count: ${counter}</button>  Dataset Update<br>
+    <button onclick="this.state.counter||=0;this.state.counter++">Click Count: ${counter||0}</button> State Update<br>
+    <button style="color:blue" onclick="this.style.color==='blue' ? this.style.color='red' : this.style.color='blue'">Click To Color</button> Style Update<br>
+    <button data-counter="0" style="color:${counter%2 ? 'red' : 'blue'}" onclick="this.dataset.counter++">Click Count: ${counter}</button> Dataset Update With Computed Style
+</p>
+```
+
+- Attribute and dataset values are scoped to the element on which they are set. 
+- States are scoped to an element and its children, i.e. children will inherit the `state` of their parent. And, state
+properties can be shadowed in child elements.
+- Nested objects in states are automatically reactive.
+
+### Dispensing with SSR
+
+If you are not trying to build a single page application, you can dispense with SSR by making a relatively minor change to your HTML authoring approach.
+
+Since `href` is not standard on all elements and `x-href` is not standard at all, web crawlers and indexing services may not
+find all your content if you author like this:
+
+```!html
+<p id="privacy-policy" x-href="./examples/privacy-policy.html#content" onclick="this.fetch()">Privacy Policy Placeholder</p>
+```
+
+_Note_: the `fetch` method is available on all elements after loading `element-fetch.js`.
+
+However, the following code will make the privacy policy visible to all web crawlers and indexing services even without 
+the user clicking on the link, and will also make the content available to users with JavaScript disabled:
+
+```!html
+<a class="r-p" id="privacy-policy" href="./examples/privacy-policy.html#content" onclick="event.preventDefault();this.fetch()">Privacy Policy Placeholder</a>
+```
+
+When you load `element-fetch.js`, all the standard HTML element are defined as classes with their corresponding standard styles, so you can use `<a>` for anything.
+
+Yet a third option is to use the `link` element. These elements are allowed in the body of documents, although rarely placed there. If you place a link immediately before
+an element and the element does not have an `href` attribute, but `fetch` is called on the element, the link's `href` will be used. In general search engines will
+follow the link and index the content. Here is an example:
+
+```!html
+<link href="./examples/privacy-policy.html#content" ref="alternate" title="Privacy Policy" type="text/html" target=">"/>
+<p title="Privacy Policy" onclick="this.fetch(event)">Privacy Policy Placeholder</p>
+```
+
+Note: `target` is not strictly necessary in this case since inner is the default. It is only provided for illustration. Although
+`target` is technically deprecated, it will still work and is used by `element-fetch.js` to determine the target of the fetch operation.
+
+The above will not work for users with JavaScript disabled, but it will work for web crawlers and indexing services.
+
 
 ### $attribute (`rhtmlx.js`)
 

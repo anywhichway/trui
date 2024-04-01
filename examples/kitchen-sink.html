@@ -167,17 +167,17 @@
 
 <p x-href="/examples/header.html" target=">" onclick="this.fetch()">Header Placeholder (Click Me)</p>
 
-<div x-href="#selfref" target=">" onload="this.fetch()">Self Ref Placeholder</div>
-<div x-href="#selfref" target="<|" onload="this.fetch()">Before Begin &lt;|</div>
-<div x-href="#selfref" target="|<" onload="this.fetch()">After Begin |&lt;</div>
-<div x-href="#selfref" target="::before" onload="this.fetch()">After Begin ::before</div>
-<div x-href="#selfref" target=">|" onload="this.fetch()">Before End &gt;|</div>
-<div x-href="#selfref" target="::after" onload="this.fetch()">Before End ::after</div>
-<div x-href="#selfref" target="|>" onload="this.fetch()">After End |&gt;</div>
-<div x-href="#selfref" target="#other" onload="this.fetch()">Not Replaced</div>
+<div x-href="#selfref" target=">" oncreate="this.fetch()">Self Ref Placeholder</div>
+<div x-href="#selfref" target="<|" oncreate="this.fetch()">Before Begin &lt;|</div>
+<div x-href="#selfref" target="|<" oncreate="this.fetch()">After Begin |&lt;</div>
+<div x-href="#selfref" target="::before" oncreate="this.fetch()">After Begin ::before</div>
+<div x-href="#selfref" target=">|" oncreate="this.fetch()">Before End &gt;|</div>
+<div x-href="#selfref" target="::after" oncreate="this.fetch()">Before End ::after</div>
+<div x-href="#selfref" target="|>" oncreate="this.fetch()">After End |&gt;</div>
+<div x-href="#selfref" target="#other" oncreate="this.fetch()">Not Replaced</div>
 <div id="other">Other Replaced</div>
 
-<div x-href="ws://localhost:10001#selfref" target=">" onload="this.fetch({options:{body:'Test Message'}})">WS Message</div>
+<div x-href="ws://localhost:10001#selfref" target=">" oncreate="this.fetch({options:{body:'Test Message'}})">WS Message</div>
 
 
 <p href="/examples/messages.html#peekaboo" target=">" x-on='mouseover ephemeral:1000 throttle:2000 fetch:{"options":{"method":"GET"}}'>Message (Mouseover Me)</p>
@@ -225,6 +225,25 @@
     <span style="font-size: ${size}px; color: ${color};">Hello 🍦rjs</span>
 </div>
 
+<a class="r-p" href="./header.html" target=">" x-on="click fetch">Header Placeholder (Click Me)</a>
+After the 'p' link;<br>
 
+<p style="border:1px solid black;padding:5px">
+    <button name="Greetings!!"
+            onclick="this.getAttribute('name')=='Greetings!!' ? this.setAttribute('name','Goodbye...') : this.setAttribute('name','Greetings!!')">
+        ${name}
+    </button> Attribute Update<br>
+    <button data-counter="0" onclick="this.dataset.counter++">Click Count: ${counter}</button>  Dataset Update<br>
+    <button onclick="this.state.counter||=0;this.state.counter++">Click Count: ${counter||0}</button> State Update<br>
+    <button style="color:blue" onclick="this.style.color==='blue' ? this.style.color='red' : this.style.color='blue'">Click To Color</button> Style Update<br>
+    <button data-counter="0" style="color:${counter%2 ? 'red' : 'blue'}" onclick="this.dataset.counter++">Click Count: ${counter}</button> Dataset Update With Computed Style
+</p>
+
+<p x-href="/examples/privacy-policy.html#content" onclick="this.fetch(event)">Privacy Policy Placeholder</p>
+
+<a class="r-p" id="privacy-policy" href="/examples/privacy-policy.html#content" onclick="this.fetch(event)">Privacy Policy Placeholder</a>
+
+<link href="/examples/privacy-policy.html#content" ref="alternate" title="Privacy Policy" type="text/html" target=">"/>
+<p title="Privacy Policy" onclick="this.fetch(event)">Privacy Policy Placeholder</p>
 </body>
 </html>
