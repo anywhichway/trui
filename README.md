@@ -1,5 +1,6 @@
 <script src="./src/rhtml.js"></script>
 <script src="./src/rhtmlx.js"></script>
+<script src="./src/element-fetch.js"></script>
 <script src="./src/rjs.js"></script>
 <script>var {button,input,span,p} = rjs.tags;</script>
 <script src="./src/xon.js"></script>
