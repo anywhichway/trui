@@ -60,7 +60,6 @@
         }
         return result;
     };
-    doc.head.insertAdjacentHTML('beforeend', `<style>a[class="xfetch"]{text-decoration:none;cursor:pointer;color:unset;}</style>`);
     document.addEventListener('click', (event) => {
         // if event target is an anchor with class xftech prevent default and return; otherwise handle normally
         if(event.target.tagName==="A" && event.target.classList.contains("xfetch")) {

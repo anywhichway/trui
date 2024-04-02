@@ -251,7 +251,7 @@ Clicking on `Privacy Policy` below will load the content of the `privacy-policy.
 so the browser back button can be used.
 
 ```!html
-<p x-href="./examples/privacy-policy.html#content" onclick="this.fetch(event)">Privacy Policy</p>
+<p x-href="./examples/privacy-policy.html#content" onclick="xfetch(event)">Privacy Policy</p>
 ```
 
 ### Dispensing with SSR
