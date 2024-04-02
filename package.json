@@ -1,0 +1,29 @@
+{
+  "name": "@anywhichway/trui",
+  "version": "0.0.7a",
+  "description": "Tiny Reactive UI",
+  "main": "trui.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anywhichway/trui.git"
+  },
+  "keywords": [
+    "vanjs",
+    "react",
+    "vue",
+    "lit",
+    "ember",
+    "preact",
+    "ember",
+    "angular"
+  ],
+  "author": "Simon Y Blackwell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anywhichway/trui/issues"
+  },
+  "homepage": "https://github.com/anywhichway/trui#readme"
+}
