@@ -197,25 +197,10 @@ However, the following code will make the privacy policy visible to all web craw
 the user clicking on the link, and will also make the content available to users with JavaScript disabled:
 
 ```!html
-<a class="r-p" id="privacy-policy" href="./examples/privacy-policy.html#content" onclick="event.preventDefault();this.fetch()">Privacy Policy Placeholder</a>
+<p title="Privacy Policy" onclick="this.fetch(event)">
+    <a class="rhtml" href="./examples/privacy-policy.html#content" target=">">Privacy Policy</a>
+</p>
 ```
-
-When you load `element-fetch.js`, all the standard HTML element are defined as classes with their corresponding standard styles, so you can use `<a>` for anything.
-
-Yet a third option is to use the `link` element. These elements are allowed in the body of documents, although rarely placed there. If you place a link immediately before
-an element and the element does not have an `href` attribute, but `fetch` is called on the element, the link's `href` will be used. In general search engines will
-follow the link and index the content. Here is an example:
-
-```!html
-<link href="./examples/privacy-policy.html#content" ref="alternate" title="Privacy Policy" type="text/html" target=">"/>
-<p title="Privacy Policy" onclick="this.fetch(event)">Privacy Policy Placeholder</p>
-```
-
-Note: `target` is not strictly necessary in this case since inner is the default. It is only provided for illustration. Although
-`target` is technically deprecated, it will still work and is used by `element-fetch.js` to determine the target of the fetch operation.
-
-The above will not work for users with JavaScript disabled, but it will work for web crawlers and indexing services.
-
 
 ### $attribute (`rhtmlx.js`)
 
