@@ -132,7 +132,7 @@ var rjsForm = () => {
 document.currentScript.insertAdjacentElement("afterend", rjsForm());
 ```
 
-### Element Fetch (element-fetch.js 1148 bytes) - similar to htmx load
+### Element Fetch (xfetch.js 1148 bytes) - similar to htmx load
 
 ```!html
 <script src="./src/element-fetch.js"></script>
@@ -247,8 +247,7 @@ When `xfetch.js` is loaded:
 - all element can use an `href` and `target` attribute, or alternatively `x-href` and `x-target` for compliance with the HTML standard.
 - under certain conditions, you can dispense with SSR by making a relatively minor change to you HTML authoring approach.
 
-Clicking on `Privacy Policy` below will load the content of the `privacy-policy.html` file into the `p` element and update history
-so the browser back button can be used.
+Clicking on `Privacy Policy` below will load the content of the `privacy-policy.html` file into the `p` element. 
 
 ```!html
 <p x-href="./examples/privacy-policy.html#content" onclick="xfetch(event)">Privacy Policy</p>
@@ -267,7 +266,7 @@ find all your content if you author like this:
 
 However, by adding an anchor with the class `xfetch` you can make the privacy policy visible to all web 
 crawlers and indexing services even without the user clicking on the link, and will also make the content available to 
-users with JavaScript disabled:
+users with JavaScript disabled and ensure proper behavior of the browser back button:
 
 ```!html
 <p title="Privacy Policy" onclick="xfetch(event)" x-target=">">
