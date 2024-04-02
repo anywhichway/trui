@@ -294,6 +294,10 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.7a 2024-04-01
+
+- added element-fetch.js to README, documented approach to dispensing with SSR
+
 v0.0.6a 2024-04-31
 
 - improved documentation
