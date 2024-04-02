@@ -1,6 +1,6 @@
 {
   "name": "@anywhichway/trui",
-  "version": "0.0.7a",
+  "version": "0.0.8a",
   "description": "Tiny Reactive UI",
   "main": "trui.js",
   "scripts": {

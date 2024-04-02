@@ -30,7 +30,7 @@
             return functions.throttle(ev, ms)
         },
         async fetch(ev, options) {
-            await this.fetch(ev,options);
+            await xfetch(ev,options);
             return true;
         },
         preventDefault(ev) {

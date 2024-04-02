@@ -127,15 +127,8 @@
                             else e.appendChild(doc.createTextNode(c + ""));
                         }
                         _d_ = prv;
-                        if (this instanceof Node) {
-                            // gc
-                            //dM.forEach((set, key, map) => {
-                             //   set.delete(this);
-                             //   set.size !== 0 || map.delete(key);
-                            //});
-                            this.replaceWith(e);
-                        }
-                        if (e.interpolate) e.interpolate();
+                        if (this instanceof Node) this.replaceWith(e);
+                        if (e.resolve) e.resolve();
                         !attrs.oncreate || attrs.oncreate(dp(new Event('create', {
                             bubbles: true,
                             cancelable: false

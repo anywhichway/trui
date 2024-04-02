@@ -1,22 +1,4 @@
 (() => {
-    window.component = (id,{target,mode,tag}={}) => {
-        const template = document.getElementById(id),
-            el = document.createElement(tag||"div");
-        el.innerHTML = template.innerHTML;
-        if(mode) {
-            const nodes = el.childNodes;
-            el.attachShadow({mode});
-            el.shadowRoot.append(...nodes);
-            if(target) {
-                target.append(el);
-                el.resolve(true);
-            }
-        } else if(target) {
-            if(tag) target.append(el);
-            else target.append(...el.childNodes);
-        }
-        return el;
-    }
     window.$closest = (scope,selector) => {
         if(scope) {
             if(typeof scope==="object") {
@@ -60,20 +42,5 @@
             el.setAttribute(property,value);
         }
         return el;
-    }
-    if(window.trui) {
-        trui.add =  (t, ...els) => {
-            let w = "beforeend";
-            if (t.constructor.name === "Object") {
-                w = t.where || "beforeend";
-                t = t.target;
-            }
-            let n = t
-            for (let e of els.flatMap()) {
-                n.insertAdjacentElement(w, e);
-                if (w !== "afterend") w = "afterend";
-                n = e;
-            }
-        };
     }
 })();

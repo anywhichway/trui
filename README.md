@@ -1,7 +1,8 @@
 <script src="./src/rhtml.js"></script>
-<script src="./src/rhtmlx.js"></script>
-<script src="./src/element-fetch.js"></script>
+<script src="src/xrhtml.js"></script>
+<script src="src/xfetch.js"></script>
 <script src="./src/rjs.js"></script>
+<script src="./src/xrjs.js"></script>
 <script>var {button,input,span,p} = rjs.tags;</script>
 <script src="./src/xon.js"></script>
 
@@ -157,8 +158,6 @@ With reactive html, you can use the JavaScript `${}` syntax directly in your HTM
 
 - Attributes and `dataset` values are automatically reactive if they are referenced within `${}`.
 - A `state` property is added to all `HTMLElement` objects. Unlike the `dataset` property, `state` can contain values of any type including nested objects and functions.
-- All element can use an `href` and `target` attribute, or alternatively `x-href` and `x-target` for compliance with the HTML standard.
-- Under certain conditions, you can dispense with SSR by making a relatively minor change to you HTML authoring approach.
 
 ### Reactive Attributes, Datasets, and States
 
@@ -180,27 +179,6 @@ With reactive html, you can use the JavaScript `${}` syntax directly in your HTM
 properties can be shadowed in child elements.
 - Nested objects in states are automatically reactive.
 
-### Dispensing with SSR
-
-If you are not trying to build a single page application, you can dispense with SSR by making a relatively minor change to your HTML authoring approach.
-
-Since `href` is not standard on all elements and `x-href` is not standard at all, web crawlers and indexing services may not
-find all your content if you author like this:
-
-```!html
-<p id="privacy-policy" x-href="./examples/privacy-policy.html#content" onclick="this.fetch()">Privacy Policy Placeholder</p>
-```
-
-_Note_: the `fetch` method is available on all elements after loading `element-fetch.js`.
-
-However, the following code will make the privacy policy visible to all web crawlers and indexing services even without 
-the user clicking on the link, and will also make the content available to users with JavaScript disabled:
-
-```!html
-<p title="Privacy Policy" onclick="this.fetch(event)">
-    <a class="rhtml" href="./examples/privacy-policy.html#content" target=">">Privacy Policy</a>
-</p>
-```
 
 ### $attribute (`rhtmlx.js`)
 
@@ -256,43 +234,106 @@ If you have a complex structure, you can create dynamic selectors with string te
 
 Can be used standalone or with any other `trui` files.
 
-## Element Fetch (`element-fetch.js`)
+The functionality of `rjs.js` is similar to VanJS.
+
+
+## Extended Fetch (`xfetch.js`)
 
 Can be used standalone or with any other `trui` files.
+
+When `xfetch.js` is loaded:
+
+- all elements will have a `fetch` method that can be used to load content into or replace the element.
+- all element can use an `href` and `target` attribute, or alternatively `x-href` and `x-target` for compliance with the HTML standard.
+- under certain conditions, you can dispense with SSR by making a relatively minor change to you HTML authoring approach.
+
+Clicking on `Privacy Policy` below will load the content of the `privacy-policy.html` file into the `p` element and update history
+so the browser back button can be used.
+
+```!html
+<p x-href="./examples/privacy-policy.html#content" onclick="this.fetch(event)">Privacy Policy</p>
+```
+
+### Dispensing with SSR
+
+If you are not trying to build a single page application, you can dispense with SSR by making a relatively minor change to your HTML authoring approach.
+
+Since `href` is not standard on all elements and `x-href` is not standard at all, web crawlers and indexing services may not
+find all your content if you author like this:
+
+```html
+<p x-href="./examples/privacy-policy.html#content" onclick="xfetch(event)">Privacy Policy</p>
+```
+
+However, by adding an anchor with the class `xfetch` you can make the privacy policy visible to all web 
+crawlers and indexing services even without the user clicking on the link, and will also make the content available to 
+users with JavaScript disabled:
+
+```!html
+<p title="Privacy Policy" onclick="xfetch(event)" x-target=">">
+    <a class="xfetch" href="./examples/privacy-policy.html#content" target="_top">Privacy Policy</a>
+</p>
+```
+
+Note the targets above. A `target` or `x-target` on the `p` element will be used as the target for the `fetch` operation.
+Whereas the `target` on the `a` element will be used when JavaScript is not enabled. If you do not provide a target
+on the container element, it will fall through to the target on the `a` element. If neither is provided, the default
+target is for the container is `>`, i.e. inner content.
+
+Using a hash in the `href` allows the loaded content to be an entire webpage with header, footer, and other content,
+but only the content with the `id` specified in the hash will be loaded into the target element. But, when JavaScript is
+disabled, the entire page will be loaded and simply scrolled to the target.
 
 ## Xon (`xon.js`)
 
 Can be used standalone or with any other `trui` files.
 
+## Comparing trui To Other Libraries
 
+THe most relevant libraries to compare `trui` to are `VanJS` and `htmx`. Neither `VanJS` nor `htmx` provide reactive 
+HTML templating like `rhtml.js` and `rhtmlx.js`. You could use either one of these libraries in conjunction with
+just `rhtml.js` and `rhtmlx.js`.
 
-## Comparing trui wuth VanJS and htmx
+### rjs.js and xrjs.js vs VanJS
 
-- trui `rjs.js` is 1,548 bytes minified and gzipped, while VanJS official number is 1,055
-- the combined size of `rjs.js` htmx like add-ons is 2,792 bytes, less than half the size of htmx
-- trui core has a slightly smaller API surface than VanJS, it does not support `add` by default, but it can be added with an extension
-- trui has the additional aliases `observe`, `value`, and `peek` for the VanJS `derive`, `rawValue`, and `val` respectively
-- there are number of htmx capabilities that are not in trui, e.g. history management, form validity checking, animations
-- when resolving state values in templates, trui does not require accessing the `value` property, VanJS does, e.g. `console.log(`Counter: ${counter}`))` vs `console.log(`Counter: ${counter.val}`))`
-- if existing nodes are provided as child nodes, trui will move them into its scope, VanJS will not and throws an error
-- neither VanJS or htmx provide a reactive HTML templating like `rhtml.js` and `rhtmlx.js`
-- VanJS and HTMX are more mature, and have way more supporters, documentation, and add-ons
-- trui has a powerful addon for dynamic content loading that works similar to htmx, targets include inner, outer (replace), before begin, after begin, before end, after end
-- true provides an `oncreate` handler
-- trui does not have a TypeScript definition file
-- true does not currently have an SSR package
+- `rjs.js` is 1,548 bytes minified and gzipped, while `VanJS` official number is 1,055
+- `rjs` has a slightly smaller API surface than `VanJS`, it does not support `add` by default, but it can be added by loading `xrjs.js`
+- `xrjs` supports a higher level component model than `VanJS`
+- `rjs` has the additional aliases `observe`, `value`, and `peek` for the `VanJS` `derive`, `rawValue`, and `val` respectively
+- when resolving state values in templates, `rjs` does not require accessing the `value` property, VanJS does, e.g. `console.log(`Counter: ${counter}`))` vs `console.log(`Counter: ${counter.val}`))`
+- if existing nodes are provided as child nodes, rjs will move them into its scope, VanJS will not and throws an error
+- `rjs` is `rhtml` aware and will resolve reactive values in generated HTML
+- `rjs` provides an `oncreate` handler
+- `rjs` does not have a TypeScript definition file
+- `rjs` does not currently have an SSR package, although with `rhtml.js`, `rhtmlx.js`, and `xfetch.js` you may not need SSR
+- `VanJS` is more mature, and has way more supporters, documentation, and add-ons
+
+### xon.js and xfetch.js vs htmx
+
+- the combined size of `xon.js` and `xfetch.js` combined are less than half the size of `htmx`
+- there are number of `htmx` capabilities that are not in trui, e.g. form validity checking, animations
+- `htmx` is more mature, and has way more supporters, documentation, and add-ons
 
 ## Roadmap
 
 Post ideas at https://github.com/anywhichway/trui/issues
 
-- Add a `trui-ssr` package
+- Add a `rjs-ssr.js` package
+- Add an `xform.js` package to support form validation
 
 ## License
 
 MIT
 
 ## Release History (Reverse chronological order)
+
+v0.0.8a 2024-04-01
+
+- renamed `element-fetch.js` to `xfetch.js`
+- renamed `rhtmlx.js` to `xrhtml.js`
+- split `xrhtml.js` into `rhtmlx.js` and `xrjs.js`
+- improved non-SSR approach
+- improved documentation
 
 v0.0.7a 2024-04-01
 
