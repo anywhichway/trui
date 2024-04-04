@@ -29,6 +29,19 @@
         every(ev, ms) {
             return functions.throttle(ev, ms)
         },
+        load(ev, fn) {
+            const parts = fn.split(".");
+            let f = globalThis;
+            for (let p of parts) {
+                f = f[p];
+                if (!p) {
+                    console.warn(`xon: ${fn} is not a valid function`);
+                    return false;
+                }
+            }
+            if (typeof f === "function") return f(ev);
+            else console.warn(`xon: ${fn} is not a valid function`);
+        },
         async fetch(ev, options) {
             await xfetch(ev,options);
             return true;
@@ -58,9 +71,9 @@
     }
 
     const xon = (e, a, ctx) => {
-        const keywords = ["once", "capture", "passive", "preventDefault", "stop", "stopImmediate"],
+        const keywords = ["capture", "once","passive", "preventDefault", "stop", "stopImmediate"],
             parts = a.split(" "),
-            enames = parts.filter(p => !p.includes(":") && !keywords.includes(p)),
+            enames = parts.filter(p => p.includes("load") || (!p.includes(":") && !keywords.includes(p))),
             opts = parts.filter(p => keywords.includes(p) || ["once", "capture", "passive"].includes(p)).reduce((opts, key) => {
                 opts[key] = true;
                 return opts;
@@ -125,7 +138,7 @@
     window.xon = HTMLElement.prototype.xon = xon;
 
     xon.activateDOM = () => {
-        [...document.querySelectorAll('[xon]'), ...document.querySelectorAll('[x-on]')].forEach(el => {
+        [...document.querySelectorAll('[xon],[x-on]')].forEach(el => {
             xon(el, el.getAttribute('xon') || el.getAttribute('x-on'), typeof rjs === "function" ? rjs.ctx : {})
         });
     }

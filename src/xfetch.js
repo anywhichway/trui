@@ -73,4 +73,16 @@
             if(el) el.innerHTML = state.html;
         }
     })
+    document.addEventListener("DOMContentLoaded", () => {
+        [...document.querySelectorAll(["a.xfetch"])].forEach(async el => {
+            const parent = el.parentElement;
+            if(!parent && !parent.hasAttribute("href") && !parent.hasAttribute("x-href")) return;
+            if([...parent.attributes].some(attr => {
+                return attr.value.includes("xfetch")
+            })) return;
+            await xfetch({currentTarget:parent,preventDefault(){}});
+            el.dispatchEvent(Object.defineProperty(new Event("load",{bubbles:false,cancelable:false}), "target", {value: el}));
+        });
+        document.body.resolve();
+    })
 })();

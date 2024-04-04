@@ -1,8 +1,8 @@
 {
   "name": "@anywhichway/trui",
-  "version": "0.0.8a",
+  "version": "0.0.9a",
   "description": "Tiny Reactive UI",
-  "main": "trui.js",
+  "main": "_trui.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

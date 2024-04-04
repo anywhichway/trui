@@ -5,9 +5,13 @@
     <title>rjs:Kitchen Sink Example</title>
 </head>
 <body>
-<script src="../src/xfetch.js"></script>
+<script>
+
+</script>
 <script src="../src/rhtml.js"></script>
 <script src="../src/xrhtml.js"></script>
+<!--script src="../src/oncreate.js"></script-->
+<script src="../src/xfetch.js"></script>
 <script src="../src/xon.js"></script>
 <script src="../src/rjs.js"></script>
 <script src="../src/xrjs.js"></script>
@@ -168,14 +172,16 @@
 
 <p x-href="/examples/header.html" target=">" onclick="xfetch(event)">Header Placeholder (Click Me)</p>
 
-<div x-href="#selfref" target=">" oncreate="xfetch(event)">Self Ref Placeholder</div>
-<div x-href="#selfref" target="<|" oncreate="xfetch(event)">Before Begin &lt;|</div>
-<div x-href="#selfref" target="|<" oncreate="xfetch(event)">After Begin |&lt;</div>
-<div x-href="#selfref" target="::before" oncreate="xfetch(event)">After Begin ::before</div>
-<div x-href="#selfref" target=">|" oncreate="xfetch(event)">Before End &gt;|</div>
-<div x-href="#selfref" target="::after" oncreate="xfetch(event)">Before End ::after</div>
-<div x-href="#selfref" target="|>" oncreate="xfetch(event)">After End |&gt;</div>
-<div x-href="#selfref" target="#other" oncreate="xfetch(event)">Not Replaced</div>
+<div x-href="#selfref" target=">">
+    <a class="xfetch" href="#selfref">Self Ref Placeholder</a>
+</div>
+<div x-href="#selfref" target="<|" onload="console.log(event);xfetch(event)">Before Begin &lt;|</div>
+<div x-href="#selfref" target="|<" onload="xfetch(event)">After Begin |&lt;</div>
+<div x-href="#selfref" target="::before" onload="xfetch(event)">After Begin ::before</div>
+<div x-href="#selfref" target=">|" onload="xfetch(event)">Before End &gt;|</div>
+<div x-href="#selfref" target="::after" onload="xfetch(event)">Before End ::after</div>
+<div x-href="#selfref" target="|>" onload="xfetch(event)">After End |&gt;</div>
+<div x-href="#selfref" target="#other" onload="xfetch(event)">Not Replaced</div>
 <div id="other">Other Replaced</div>
 
 <div x-href="ws://localhost:10001#selfref" target=">" oncreate="xfetch(event,{options:{body:'Test Message'}})">WS Message</div>

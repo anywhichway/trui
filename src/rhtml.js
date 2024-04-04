@@ -111,5 +111,13 @@
     }
     let _currentElement;
     Object.defineProperty(window,"currentElement",{get: () => document.currentScript||_currentElement,set: (value) => _currentElement = value});
-    document.addEventListener("DOMContentLoaded", () => document.body.resolve());
+    const _dispatchEvent = EventTarget.prototype.dispatchEvent;
+    EventTarget.prototype.dispatchEvent = function(event) {
+        if(event.type==="load" && this.loaded) return;
+        this.loaded= true;
+        return _dispatchEvent.call(this, event);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        document.body.resolve()
+    });
 })()
