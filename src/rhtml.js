@@ -131,19 +131,35 @@
                 if(!node.nextSibling) break;
                 node = node.nextSibling;
                 if(node instanceof Text) {
-                    text += node.textContent;
-                    open += node.textContent.split("{").length - 1;
-                    close += node.textContent.split("}").length - 1;
+                    let subtext = node.textContent;
+                    while(close!==open) {
+                        const start = subtext.indexOf("{"),
+                            end = subtext.indexOf("}");
+                        if(start>=0 && start<end) {
+                            open++;
+                            subtext = subtext.slice(end+1);
+                        } else if(end>=0) {
+                            close++;
+                            subtext = subtext.slice(0,end+1);
+                        } else {
+                            break;
+                        }
+                    }
+                    node.textContent = node.textContent.slice(subtext.length);
+                    text += subtext;
                 } else {
                     text += node.outerHTML;
+                    node.innerHTML = "";
                 }
             }
-            while(node && t.nextSibling && t.nextSibling!==node) t.nextSibling.remove();
-            if(node && node!==t) node.remove();
+            while(node && t.nextSibling && t.nextSibling!==node && t.nextSibling.textContent.trim()==="") {
+                t.nextSibling.remove();
+            }
+            if(node && node!==t && node.textContent.trim()==="") node.remove();
             const html = resolve(text, t),
                 el = document.createElement("div");
             el.innerHTML = html.trim();
-            el._$ = text;
+            el.firstChild._$ = text;
             t.replaceWith(el.firstChild)
         }
     }
