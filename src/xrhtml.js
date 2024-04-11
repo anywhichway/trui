@@ -43,4 +43,19 @@
         }
         return el;
     }
+    window.$ = (qs) => document.querySelector(qs);
+
+    window.element = (html,{state,properties}={}) => {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        const el = div.firstElementChild;
+        if(properties) {
+            Object.entries(Object.getOwnPropertyDescriptors(properties)).forEach(([key,desc]) => Object.defineProperty(el,key,desc))
+        }
+        if(state) {
+            el.state.assign(state);
+            el.resolve(true);
+        }
+        return el;
+    }
 })();

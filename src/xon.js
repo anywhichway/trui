@@ -43,6 +43,8 @@
             else console.warn(`xon: ${fn} is not a valid function`);
         },
         async fetch(ev, options) {
+            ev.preventDefault();
+            options ||= {};
             await xfetch(ev,options);
             return true;
         },
@@ -78,7 +80,7 @@
                 opts[key] = true;
                 return opts;
             }, {}),
-            mods = parts.filter(p => p.includes(":") || ["preventDefault", "stop", "stopImmediate"].includes(p)).reduce((mods, mod) => {
+            mods = parts.filter(p => p.includes(":") || ["fetch","preventDefault", "stop", "stopImmediate"].includes(p)).reduce((mods, mod) => {
                     let [f, ...args] = mod.split(":"),
                         arg = args.join(":");
                     if (functions[f]) {

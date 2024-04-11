@@ -326,6 +326,10 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.10a 2024-04-01
+
+Addressed issue with properly handling nested ${ with HTML as its result value
+
 v0.0.8a 2024-04-01
 
 - renamed `element-fetch.js` to `xfetch.js`

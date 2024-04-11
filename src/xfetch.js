@@ -83,6 +83,6 @@
             await xfetch({currentTarget:parent,preventDefault(){}});
             el.dispatchEvent(Object.defineProperty(new Event("load",{bubbles:false,cancelable:false}), "target", {value: el}));
         });
-        document.body.resolve();
+        document.body?.resolve();
     })
 })();

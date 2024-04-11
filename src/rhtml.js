@@ -12,7 +12,7 @@
                 get: (target, prop) => {
                     if(typeof prop === "symbol") return Reflect.get(target, prop);
                     if(recursing<=1 && target[prop]!==undefined) return target[prop];
-                    if(target.state && target.state[prop]!==undefined) return target.state[prop];
+                    if(target.state && target.state[prop]!==undefined) return typeof target.state[prop] === "function" ? target.state[prop].bind(target) : target.state[prop]
                     if(recursing<=1 && target.dataset && target.dataset[prop]!==undefined) return parse(target.dataset[prop]);
                     if(recursing<=1 && target.hasAttribute && target.hasAttribute(prop)) {
                         const value = target.getAttribute(prop);
@@ -50,7 +50,10 @@
         get() {
             Object.defineProperty(this,"state",{value:new Proxy({}, {
                 get(target, prop) {
-                    if(prop==="assign") return (object) => Object.assign(target,object);
+                    if(prop==="assign") return (object) => {
+                        //return Object.assign(target,object);
+                        return Object.entries(Object.getOwnPropertyDescriptors(object)).forEach(([key,desc]) => Object.defineProperty(target,key,desc))
+                    }
                     return target[prop];
                 },
                 set: (target, prop, value) => {
@@ -101,7 +104,20 @@
                 if (["$",prop].every(s => !s || attr._$.includes(s))) t.setAttribute(attr.name, resolve(attr._$, root||t));
             }
             const childNodes = t.shadowRoot ? t.shadowRoot.childNodes : t.childNodes;
-            for (const child of childNodes) if (child.resolve) child.resolve(run,{prop,root:t.shadowRoot ? t : null});
+            for (const child of childNodes) {
+                if (child.resolve) {
+                    try {
+                        child.resolve(run,{prop,root:t.shadowRoot ? t : null});
+                    } catch {
+                        // this is to handle ${ that contain HTML and are not in the same node
+                        // should really walk and collapse
+                        if(t.children.length===0  && t.innerHTML.includes("$")) {
+                            t.innerHTML = resolve(t.innerHTML,root||t);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
     Text.prototype.resolve = function(_,{prop}) {
