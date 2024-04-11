@@ -126,7 +126,15 @@
             let open = t._$.split("{").length - 1,
                 close = t._$.split("}").length - 1;
             if(open===close) {
-                t.textContent = resolve(t._$, t);
+                const text = resolve(t._$, t),
+                    el = document.createElement("div");
+                el.innerHTML = text.trim();
+                if(el.firstChild) {
+                    el.firstChild._$ = t._$;
+                    t.replaceWith(el.firstChild);
+                } else {
+                    t.textContent = text;
+                }
                 return;
             }
             let node = t,
