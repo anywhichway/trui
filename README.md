@@ -326,9 +326,13 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.12a 2024-04-11
+
+more handling of nested ${ with HTML as its result value
+
 v0.0.11a 2024-04-11
 
-mode handling of nested ${ with HTML as its result value
+more handling of nested ${ with HTML as its result value
 
 v0.0.10a 2024-04-11
 

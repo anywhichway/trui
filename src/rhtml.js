@@ -138,8 +138,8 @@
                     text += node.outerHTML;
                 }
             }
-            while(node && t.nextSibling!==node) t.nextSibling.remove();
-            if(node!==t) node.remove();
+            while(node && t.nextSibling && t.nextSibling!==node) t.nextSibling.remove();
+            if(node && node!==t) node.remove();
             const html = resolve(text, t),
                 el = document.createElement("div");
             el.innerHTML = html.trim();
