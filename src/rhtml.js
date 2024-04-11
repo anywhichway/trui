@@ -101,7 +101,7 @@
             if (t._$) {
                 t.innerHTML = resolve(t._$, root || t);
             } else {
-                t.normalize();
+                //t.normalize();
                 for (const attr of t.attributes) {
                     attr._$ ||= attr.value;
                     if (["$", prop].every(s => !s || attr._$.includes(s))) t.setAttribute(attr.name, resolve(attr._$, root || t));
@@ -159,8 +159,12 @@
             const html = resolve(text, t),
                 el = document.createElement("div");
             el.innerHTML = html.trim();
-            el.firstChild._$ = text;
-            t.replaceWith(el.firstChild)
+            if(el.firstChild) {
+                el.firstChild._$ = text;
+                t.replaceWith(el.firstChild)
+            } else {
+                t.textContent = html.trim();
+            }
         }
     }
     let _currentElement;
