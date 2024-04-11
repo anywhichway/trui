@@ -326,7 +326,11 @@ MIT
 
 ## Release History (Reverse chronological order)
 
-v0.0.10a 2024-04-01
+v0.0.11a 2024-04-11
+
+mode handling of nested ${ with HTML as its result value
+
+v0.0.10a 2024-04-11
 
 Addressed issue with properly handling nested ${ with HTML as its result value
 

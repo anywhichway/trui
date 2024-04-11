@@ -98,23 +98,18 @@
                 window.currentElement = null;
             }
         } else if(t.tagName!=="CODE") {
-            t.normalize();
-            for (const attr of t.attributes) {
-                attr._$ ||= attr.value;
-                if (["$",prop].every(s => !s || attr._$.includes(s))) t.setAttribute(attr.name, resolve(attr._$, root||t));
-            }
-            const childNodes = t.shadowRoot ? t.shadowRoot.childNodes : t.childNodes;
-            for (const child of childNodes) {
-                if (child.resolve) {
-                    try {
-                        child.resolve(run,{prop,root:t.shadowRoot ? t : null});
-                    } catch {
-                        // this is to handle ${ that contain HTML and are not in the same node
-                        // should really walk and collapse
-                        if(t.children.length===0  && t.innerHTML.includes("$")) {
-                            t.innerHTML = resolve(t.innerHTML,root||t);
-                            break;
-                        }
+            if (t._$) {
+                t.innerHTML = resolve(t._$, root || t);
+            } else {
+                t.normalize();
+                for (const attr of t.attributes) {
+                    attr._$ ||= attr.value;
+                    if (["$", prop].every(s => !s || attr._$.includes(s))) t.setAttribute(attr.name, resolve(attr._$, root || t));
+                }
+                const childNodes = t.shadowRoot ? t.shadowRoot.childNodes : t.childNodes;
+                for (const child of childNodes) {
+                    if (child.resolve) {
+                        child.resolve(run, {prop, root: t.shadowRoot ? t : null});
                     }
                 }
             }
@@ -123,7 +118,34 @@
     Text.prototype.resolve = function(_,{prop}) {
         const t = this;
         t._$ ||= t.textContent;
-        if(["$",prop].every(s => !s || t._$.includes(s))) t.textContent = resolve(t._$, t);
+        if(["$",prop].every(s => !s || t._$.includes(s))) {
+            let open = t._$.split("{").length - 1,
+                close = t._$.split("}").length - 1;
+            if(open===close) {
+                t.textContent = resolve(t._$, t);
+                return;
+            }
+            let node = t,
+                text = t._$;
+            while(close<open) {
+                if(!node.nextSibling) break;
+                node = node.nextSibling;
+                if(node instanceof Text) {
+                    text += node.textContent;
+                    open += node.textContent.split("{").length - 1;
+                    close += node.textContent.split("}").length - 1;
+                } else {
+                    text += node.outerHTML;
+                }
+            }
+            while(node && t.nextSibling!==node) t.nextSibling.remove();
+            if(node!==t) node.remove();
+            const html = resolve(text, t),
+                el = document.createElement("div");
+            el.innerHTML = html.trim();
+            el._$ = text;
+            t.replaceWith(el.firstChild)
+        }
     }
     let _currentElement;
     Object.defineProperty(window,"currentElement",{get: () => document.currentScript||_currentElement,set: (value) => _currentElement = value});
