@@ -119,6 +119,10 @@
         const t = this;
         t._$ ||= t.textContent;
         if(["$",prop].every(s => !s || t._$.includes(s))) {
+            //if(t.render && !recursing) {
+              //  t.render();
+             //   return;
+            //}
             let open = t._$.split("{").length - 1,
                 close = t._$.split("}").length - 1;
             if(open===close) {
@@ -163,7 +167,9 @@
                 el.firstChild._$ = text;
                 t.replaceWith(el.firstChild)
             } else {
-                t.textContent = html.trim();
+                t._$ = text;
+                t.textContent = "";
+                //t.render = () => t.resolve(true,{prop},true);
             }
         }
     }
