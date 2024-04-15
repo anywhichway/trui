@@ -159,6 +159,9 @@ With reactive html, you can use the JavaScript `${}` syntax directly in your HTM
 - Attributes and `dataset` values are automatically reactive if they are referenced within `${}`.
 - A `state` property is added to all `HTMLElement` objects. Unlike the `dataset` property, `state` can contain values of any type including nested objects and functions.
 
+Note: `rhtml.js` should be loaded in the `head` of your HTML document.
+
+
 ### Reactive Attributes, Datasets, and States
 
 ```!html
@@ -178,6 +181,29 @@ With reactive html, you can use the JavaScript `${}` syntax directly in your HTM
 - States are scoped to an element and its children, i.e. children will inherit the `state` of their parent. And, state
 properties can be shadowed in child elements.
 - Nested objects in states are automatically reactive.
+
+### Resolving Reactive HTML
+
+The best way to resolve reactive HTML is to call `document.resolve()` in a script immediately after the `body` tag of a document:
+
+`document.resolve()` will hide the body, resolve the document, and then un-hide the body. If you do not want the body
+to be hidden, you can call `document.resolve({hidden:false})`; however, this will result in screen flicker.
+
+`document.resolve()` can be called with a `state` and `dataset` argument for use in resolving reactive values in the document.
+Updating properties of `document.body.state` or `document.body.dataset` will then trigger a re-render of the document.
+
+```html
+<body>
+    <script>
+        document.resolve({state:{greeting:"Hello World!",counter:0}});
+        document.currentScript.remove();
+    </script>
+${greeting}
+</body>
+```
+
+<b>IMPORTANT<b>: You MUST make the call to remove the current script, or the resolve in this script will override any 
+state or dataset values set elsewhere in the document.
 
 
 ### $attribute (`rhtmlx.js`)
@@ -223,7 +249,6 @@ Here is the same content as used in the simple examples, but with a selector to 
 ```
 
 If you have a complex structure, you can create dynamic selectors with string templates, e.g. `p[data-${event.target.name}]:has(> input)`.
-
 
 ### $state (`rhtmlx.js`)
 
@@ -325,6 +350,10 @@ Post ideas at https://github.com/anywhichway/trui/issues
 MIT
 
 ## Release History (Reverse chronological order)
+
+v0.0.17a 2024-04-11 
+
+Added `document.resolve()` to hide body, resolve document, and unhide body instead of just automatically resolving body.
 
 v0.0.16a 2024-04-11
 

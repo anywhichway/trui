@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>rjs:Kitchen Sink Example</title>
+    <script src="../src/rhtml.js"></script>
+    <script src="../src/xrhtml.js"></script>
+    <!--script src="../src/oncreate.js"></script-->
+    <script src="../src/xfetch.js"></script>
+    <script src="../src/xon.js"></script>
+    <script src="../src/rjs.js"></script>
+    <script src="../src/xrjs.js"></script>
+    <script>document.addEventListener("DOMContentLoaded",() => {
+        setTimeout(()=>document.body.state.name = "Bill",1000);
+    })</script>
 </head>
 <body>
 <script>
-
+    document.resolve({state:{name:"Alice"}});
+    document.currentScript.remove();
 </script>
-<script src="../src/rhtml.js"></script>
-<script src="../src/xrhtml.js"></script>
-<!--script src="../src/oncreate.js"></script-->
-<script src="../src/xfetch.js"></script>
-<script src="../src/xon.js"></script>
-<script src="../src/rjs.js"></script>
-<script src="../src/xrjs.js"></script>
+<div>${name}</div>
 <script type="module">
     const {button,input,div, sup} = rjs.tags;
 

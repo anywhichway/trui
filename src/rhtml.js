@@ -189,7 +189,15 @@
         this.loaded= true;
         return _dispatchEvent.call(this, event);
     }
-    document.addEventListener("DOMContentLoaded", () => {
-        document.body.resolve()
-    });
+    document.resolve = ({state,dataset,hidden=true}={}) => {
+        let display = document.body.style.display;
+        if(hidden) document.body.style.display = "none";
+        if(state) document.body.state.assign(state);
+        if(dataset) document.body.dataset.assign(dataset);
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.resolve();
+            if(hidden) document.body.style.display = display;
+        });
+    }
+
 })()
