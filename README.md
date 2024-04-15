@@ -351,6 +351,10 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.18a 2024-04-12
+
+Fix for undefined function `dp` (Object.defineProperty) in `xhtml.js`
+
 v0.0.17a 2024-04-11 
 
 Added `document.resolve()` to hide body, resolve document, and unhide body instead of just automatically resolving body.

@@ -51,7 +51,7 @@
         const el = div.firstElementChild;
         if(properties) {
             Object.entries(Object.getOwnPropertyDescriptors(properties)).forEach(([key,desc]) => Object.defineProperty(el,key,desc));
-            if(properties.oncreate) properties.oncreate(dp(new Event('create', {bubbles: true, cancelable: false}), 'target', {value: el}));
+            if(properties.oncreate) properties.oncreate(Object.defineProperty(new Event('create', {bubbles: true, cancelable: false}), 'target', {value: el}));
         }
         if(state) {
             el.state.assign(state);
