@@ -351,6 +351,10 @@ MIT
 
 ## Release History (Reverse chronological order)
 
+v0.0.19a 2024-04-17
+
+Fixed issue with xfetch trying to resolve body when rhtml.js is not loaded.
+
 v0.0.18a 2024-04-12
 
 Fix for undefined function `dp` (Object.defineProperty) in `xhtml.js`
